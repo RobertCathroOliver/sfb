@@ -1,0 +1,62 @@
+{"href": "/g/",
+ "games": [{"href": "/g/1", "description": "Federation vs. Klingon Duel"},
+           {"href": "/g/2", "description": "Romulan vs. Gorn Duel"}]}
+
+{"href": "/g/1",
+ "type": "game",
+ "description": "Federation vs. Klingon Duel",
+ "scenario": {"href": "/scenario/1", "name": "Duel"},
+ "map": {"href": "/map/1" },
+ "sequence_of_play": {"href": "/sequence-of-play"},
+ "history": {"href": "/history/1"}
+ "players": [{"href": "/player/1", "name": "Klingon"},
+             {"href": "/player/2", "name": "Federation"}]}
+
+{"href": "/map/1",
+ "type": "map",
+ "width": 42,
+ "height": 30,
+ "tokens": [{"href": "/unit/1", "position": "1013A"},
+            {"href": "/unit/2", "position": "0113D"}]}
+
+{"href": "/player/1",
+ "type": "player",
+ "name": "Klingon",
+ "user": {"href": "/user/1", "name": "Bob"},
+ "game": {"href": "/g/1", "description": "Federation vs. Klingon Duel"}
+ "units": [{"href": "/unit/1", "name": "Klingon D7"}]}
+
+{"href": "/user/1",
+ "type": "user",
+ "name": "Bob",
+ "email": "bob@example.com",
+ "players": [{"href": "/player/1", "name": "Klingon"}],
+ "games": [{"href": "/g/1", "description": "Federation vs. Klingon Duel"}]}
+
+{"href": "/scenario/1",
+ "type": "scenario",
+ "name": "Duel",
+ "teams": ["A", "B"],
+ "map": {"width": 42, "height": 30},
+ "units": [{"id": "A1", "team": "A", "unit": {"href": "/roster/"}},
+           {"id": "B1", "team": "B", "unit": {"href": "/roster/"}}],
+ "victory": {"A": [{"action": "destroy", "target": ["B1"]}],
+             "B": [{"action": "destroy", "target": ["A1"]}]}}
+
+{"href": "/unit/1",
+ "type": "unit",
+ "name": "Klingon D7",
+ "model": "/unit-model/1",
+ "properties": {"turn-mode": "/turn-mode/A",
+                "het-breakdown": "5-6",
+                "movement-cost": {"quantity": 1, 
+                                  "href": "/energy-type/warp-engine"},
+                "speed-plot" : [[16, 8], [20, 24]]},
+ "systems": [{"href": "/system/1", "id": 1, "name": "Phaser-1"},
+             {"href": "/system/2", "id": 2, "name": "Forward Hull"},
+             {"href": "/system/3", "id": 3, "name": "Transporter"},
+
+
+
+ 
+
