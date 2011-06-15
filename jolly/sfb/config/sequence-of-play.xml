@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<sequence-of-play name="sequence-of-play" descr="sequence-of-play" repeat="0">
+  <phase name="turn-setup-phase" descr="Turn Setup Phase">
+    <command name="turn-setup" descr="TurnSetup" mandatory="true" />
+  </phase>
+  <phase name="energy-allocation-phase" descr="Energy Allocation Phase">
+    <command name="tractor-auction" descr="Tractor/Negative Tractor Auction" mandatory="true"/>
+    <command name="energy-allocation" descr="Energy Allocation" mandatory="true"/>
+    <command name="damage-repair-allocation" descr="Continuous Damage Repair Allocation" mandatory="true"/>
+    <command name="announce-engine-doubling" descr="Announce Orion Engine Doubling"/>
+    <command name="resolve-pa-panel-energy-relase" descr="Resolve Energy Released from PA Panels"/>
+    <command name="announce-unpowered-shields" descr="Announce Unpowered Shields"/>
+  </phase>
+  <phase name="speed-determination-phase" descr="Speed Determination Phase">
+    <command name="announce-initial-speed" descr="Announce Initial Speed"/>
+  </phase>
+  <phase name="self-destruction-phase" descr="Self-Destruction Phase">
+  </phase>
+  <phase name="sensor-lock-on-phase" descr="Sensor Lock-On Phase">
+    <command name="determine-lock-on" descr="Determine Lock-On"/>
+    <command name="re-acquire-lock-on-cloak" descr="Re-acquire Lock-On to Cloaked Ships"/>
+  </phase>
+  <phase name="initial-activity-phase" descr="Initial Activity Phase">
+    <command name="tractor-rotation" descr="Tractor Rotations"/>
+    <command name="assign-boarding-party-guards" descr="Assign Boarding Parties as Guards"/>
+    <command name="assign-for-reload" descr="Take Racks Out of Service for Reloads"/>
+  </phase>
+  <phase name="impulse" descr="Impulse Procedure" repeat="32">
+    <phase name="movement-segment" descr="Movement Segment">
+      <phase name="voluntary-movement-stage" descr="Voluntary Movement Stage">
+        <command name="move" descr="Move Units Scheduled to Move"/>
+      </phase>
+      <phase name="movement-damage-stage" descr="Damage During Movement Stage">
+        <command name="resolve-ESG" descr="Resolve Actions of ESGs"/>
+        <command name="resolve-EPT" descr="Resolve Damage from Enveloping Plasma Torpedoes"/>
+        <command name="resolve-seeking-weapons" descr="Resolve Damage from Other Seeking Weapons"/>
+        <command name="resolve-web-deceleration" descr="Resolve Damage from Web Deceleration"/>
+        <command name="resolve-mines" descr="Resolve Damage from Mines"/>
+        <command name="release-from-tractor" descr="Release Units from Destroyed Tractors"/>
+        <command name="announce-speed-changes" descr="Announce Speed Changes"/>
+        <command name="tholian-web-passage-status" descr="Tholians Forgo/Resume Web Passage Status"/>
+        <command name="emergency-deceleration" descr="Emergency Deceleration Takes Effect"/>
+      </phase>
+    </phase>
+    <phase name="impulse-activity-segment" descr="Impulse Activity Segment">
+      <phase name="initial-stage" descr="Initial Stage">
+        <command name="voluntary-change-fire-control" descr="Voluntarily Change Fire Control Status"/>
+      </phase>
+      <phase name="cloaking-device-stage" descr="Cloaking Device Stage">
+        <command name="cloaking-device" descr="Activate or Deactivate Cloaking Device"/>
+      </phase>
+      <phase name="lock-on-stage" descr="Lock-On Stage">
+        <command name="determine-cloaking-lock-on" descr="Determine Lock-On to Cloaked Ships"/>
+      </phase>
+      <phase name="ship-system-functions-stage" descr="Ship System Functions Stage">
+        <command name="voluntary-tractor" descr="Activate or Release Tractor Beams Voluntarily"/>
+        <command name="lab-identification" descr="Attempt to Identify Drones and Shuttles with Labs"/>
+      </phase>
+      <phase name="seeking-weapons-stage" descr="Seeking Weapons Stage">
+        <command name="voluntary-release-seeking-weapon-control" descr="Voluntarily Release Control of Seeking Weapons"/>
+        <command name="launch-plasma-torpedoes" descr="Launch Plasma Torpedoes"/>
+        <command name="launch-drones" descr="Launch Drones"/>
+        <command name="drop-chaff" descr="Fighters Drop Chaff"/>
+        <command name="ESG-step" descr="ESG Activation/Deactivation/Announcements"/>
+      </phase>
+      <phase name="marines-activity-stage" descr="Marines Activity Stage">
+        <command name="drop-restore-shields" descr="Drop or Restore Shields"/>
+        <command name="shield-cracker-step" descr="Resolve Fire of Shield Crackers"/>
+        <command name="operate-transporters" descr="Operate Transporters"/>
+        <command name="assign-guards" descr="Target of Hit-and-Run may Assign Guards to System Raided"/>
+        <command name="activate-transporter-bombs" descr="Transporter Bombs become Active"/>
+      </phase>
+      <phase name="shuttle-function-stage" descr="Shuttle Function Stage">
+        <command name="dogfight-challenge" descr="Fighters may Issue Dogfight Challenges"/>
+        <command name="recover-shuttles" descr="Recover Shuttlecraft and Fighters"/>
+        <command name="launch-shuttles" descr="Launch Shuttlecraft and Fighters"/>
+        <command name="deck-crew-actions" descr="Deck Crews Perform Actions"/>
+      </phase>
+      <phase name="separations-stage" descr="Separations Stage">
+        <command name="lay-mine" descr="Lay Mine from Hatch"/>
+      </phase>
+      <phase name="final-function-stage" descr="Final Function Stage">
+        <command name="announce-emergency-deceleration" descr="Announce Emergency Deceleration"/>
+      </phase>
+    </phase>
+    <phase name="dogfight-resolution-interface" descr="Dogfight Resolution Interface">
+    </phase>
+    <phase name="direct-fire-weapons-segment" descr="Direct Fire Weapons Segment">
+      <phase name="fire-allocation-stage" descr="Fire Allocation Stage">
+        <command name="announce-displacement-device" descr="Announce Use of Displacement Device"/>
+        <command name="decide-direct-fire" descr="Decide Direct Fire Weapons and Targets"/>
+        <command name="announce-direct-fire" descr="Announce Direct Fire Weapons and Targets"/>
+      </phase>
+      <phase name="weapons-fire-stage" descr="Weapons Fire Stage">
+        <command name="resolve-PPD" descr="Resolve PPD fire"/>
+        <command name="resolve-hellbore-1" descr="Resolve First Hellbore Firing Option"/>
+        <command name="resolve-other-weapons" descr="Resolve Other Weapon Fire"/>
+        <command name="resolve-hellbore-2" descr="Resolve Second Hellbore Firing Option"/>
+      </phase>
+      <phase name="web-caster-stage" descr="Web-Caster Stage">
+        <command name="web-becomes-effective" descr="Previously Fired Web Becomes Effective"/>
+        <command name="web-casters-fire" descr="Web Casters Fire"/>
+        <command name="web-dissipates" descr="Previously Effective Web Dissipates"/> 
+      </phase>
+      <phase name="damage-resolution-stage" descr="Damage Resolution Stage">
+        <command name="allocate-damage" descr="Allocate Internal Damage"/>
+      </phase>
+      <phase name="post-damage-resolution-stage" descr="Post-Damage Resolution Stage">
+        <command name="operate-displacement-device" descr="Operate Displacement Device"/>
+        <command name="release-from-tractor" descr="Release Units from Destroyed Tractors"/>
+      </phase>
+    </phase>
+    <phase name="post-combat-segment" descr="Post Combat Segment">
+    </phase>
+  </phase>
+  <phase name="final-activity-phase" descr="Final Activity Phase">
+  </phase>
+  <phase name="record-keeping-phase" descr="Record Keeping Phase">
+    <command name="announce-damage-repair" descr="Announce Completion of Continuous Damage Repair"/>
+    <command name="repair-shields" descr="Repair Shields with Damage Control"/>
+    <command name="reserve-power-to-phaser-capacitors" descr="Transfer Reserve Power to Phaser Capacitors"/>
+    <command name="pa-panel-to-battery" descr="Transfer Power from PA Panels to Batteries"/>
+    <command name="pa-panel-power-dissipates" descr="PA Panels Dissipate Power to Space"/>
+    <command name="engine-doubling-damage" descr="Record Damage from Engine Doubling"/>
+    <command name="drone-rack-loading" descr="Record Drone Rack Loading/Unloading"/>
+  </phase>
+</sequence-of-play>

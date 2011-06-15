@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>       
+        <script type="text/javascript" src="http://127.0.0.1:8000/window.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                var text = "al;ksdjf;laksdjfl;kajsdf;lkajsdl;fkja;sldfkja;lskdjf;alsdkjf;laskdjf;laskdjf;alsdjkf;alskjdf;laksdjf;alskdjf;laskdjf;laskdjfl;askdfj;alskdjf;alksdjfal;skdjf;alskdjf";
+                var w1 = new SFB.Window('#window1', text, { width: 200, scrollable: true});
+              });
+        </script>
+        <title>Test Window</title>
+        <style>
+            .window {
+                overflow: hidden;
+
+                padding: 1px;
+                border: 2px solid black;
+                margin: 0px;
+
+                background-color: white;
+            }
+            .window > div.scrollable {
+                overflow: auto;
+                margin: 1px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="window1"></window>
+    </body>
+</html>

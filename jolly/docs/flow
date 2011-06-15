@@ -1,0 +1,32 @@
+Base url: /
+GET
+<games>
+ <game href="/g/1" description="Klingon vs. Romulan Duel" scenario_href="/scenario/1" time="1.6.move" lead_href="/users/2" />
+ <game href="/g/2" description="Federation vs. Orion Tournament Duel" scenario_href="/scenario/2" time="1.31.allocate-damage" />
+</games>
+PUT - not allowed
+POST - creates a new game
+description - required text
+scenario - required scenario URL
+DELETE - not allowed
+
+/g/{id}
+GET
+<game description="blah" scenario_href="/scenarios/1" lead_href="/users/2">
+ <map dimensions="" href="/map/1" />
+ <players>
+  <player href="/players/1/" name="asdf" />
+  <player href="/players/2/" name="qwerty" />
+ </players>
+</game>
+PUT - not allowed
+POST - not allowed
+DELETE - only allowed by lead
+
+/g/{id}/commands
+
+value objects need a string representation
+e.g. location 1038
+     direction A
+     position 2034E
+     moment 1.2.launch-shuttle

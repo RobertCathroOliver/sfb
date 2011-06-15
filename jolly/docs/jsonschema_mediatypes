@@ -1,0 +1,41 @@
+{
+ "template" : "http://localhost/command-templates/move",
+ "time" : "1.2.move",
+ "arguments" : {
+   "unit" : "http://localhost/units/1234567890abcdef1234567890abcdef",
+   "bearing" : "cw"
+ }
+}
+
+FormalArgument to JSON Schema
+
+name -> property name
+mandatory -> required
+upfront -> required for create vs. required for execute
+can_change -> if not, provide an enum with only one value for change operations
+default -> default (if not None)
+
+klass, validator, and is_list work together to define the other attributes
+- if is_list is True, type is "array" and items follow the following schema
+- each klass requires a JSON schema to indicate how it should be used
+- reference classes use the URI template
+- value classes use a JSON schema validation
+- ignore the validation for now
+
+Each class needs certain representations:
+- Class
+- DB representation (JSON)
+- JSON representation
+- JSON Schema representation
+
+So really we need a Class and a JSON Schema representation
+
+For formal arguments:
+Is there a way to list all available choices?
+For reference objects:
+ - Use the class (klass) to determine the DB query
+ - Use validator to restrict options
+(But is not scaleable)
+
+Need a conversion between query semantics and python functions
+

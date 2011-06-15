@@ -1,0 +1,126 @@
+"*" indicates private
+
+/
+{"games": {"href" : "/g"},
+ "users": {"href" : "/user"}}
+
+/g
+[{"title" : "X vs. Y",
+  "href" : "/g/1"},
+ {"title" : "V vs. W",
+  "href" : "/g/2"}]
+
+/g/1
+{"title" : "X vs. Y",
+ "scenario" : {"href" : "/scenario/1"},
+ "map" : {"href" : "/map/1"},
+ "players" : {"href" : "/player?g=1"},
+ "time" : "1.20.move"
+}
+
+/map/1
+{"game" : {"href" : "/g/1"},
+ "width" : 42,
+ "height" : 30,
+ "tokens" : [{"href" : "/unit/1", "position" : "1010A"},
+             {"href" : "/unit/2", "position" : "1112C"}]
+}
+
+/player?g=1
+[{"name" : "X",
+  "href" : "/player/1"},
+ {"name" : "Y",
+  "href" : "/player/2"}]
+
+/player/1
+{"name" : "X",
+ "game" : {"href" : "/g/1"},
+ "user" : {"name" : "User1", "href" : "/user/1"},
+ "units" : [{"id" : "Fed CA", "href" : "/unit/1"}],
+ *"log" : {"href" : "/log/1"},
+ *"status" : {"href" : "/status/1"},
+ *"queue" : {"href" : "/queue/1"}}
+
+/unit/1
+{"id" : "Fed CA",
+ "player" : {"href" : "/player/1"},
+ "prototype" : {"href" : "/prototype/fedCA"},
+ "properties" : {"position" : "1010A",
+                 *"speed-plot" : [[10, 16], [20, 16]],
+                 *"energy-allocation" : {...},
+                  ...},
+ "subsystems" : [{"id" : "1", "href" : "/system/1"},
+                 {"id" : "2", "href" : "/system/2"}]
+}
+
+/system/1
+{"id" : "1",
+ "unit" : {"href" : "/unit/1"},
+ "prototype" : {"href" : "/prototype/ph-1"},
+ "properties" : {"firing-arc" : "FA",
+                 "damage-arc" : "FA",
+                 "damage-status" : "undamaged",
+                 "previous-uses" : ["1.1.direct-fire-stage"]}
+}
+
+/user
+[{"name" : "User1", "href" : "/user/1"},
+ {"name" : "User2", "href" : "/user/2"}]
+
+/user/1
+{"name" : "User1",
+ "players" : {"href" : "/player?user=1"}
+} 
+
+*/queue/1
+{"player" : {"href" : "/player/1"},
+ "commands" : [{"time" : "1.23.move", "href" : "/command/1"}]
+}
+
+*/command/1
+{"issuer" : {"href" : "/player/1"},
+ "template" : {"href" : "/command-template/move"},
+ "time" : "1.23.move",
+ "arguments" : {"unit" : {"href" : "/unit/1"},
+                "bearing" : "ccw"},
+ "status" : "queued"
+}
+
+*/log/1
+[{"time" : "1.2.move",
+  "message" : "Y moved to 1234C"},
+ {"time" : "1.4.direct-fire",
+  "message" : "Y fired disruptor C causing 1 point of damage to shield #1 of X's Fed CA"}]
+
+*/status/1
+{"time" : "1.20.move",
+ "reason" : "waiting"}
+OR
+{"time" : "1.20.move",
+ "reason: "input",
+ "details" : {"href" : "/command/2",
+              "arguments" : {"bearing" : "input" }}
+}
+
+/scenario/1
+{"title" : "Duel",
+ "teams" : ["A", "B"]
+ "map" : {"width" : 42,
+          "height" : 30},
+ "players" : [{"name" : "A",
+               "team" : "A",
+               "units" : [{"id" : "Fed CA",
+                           "prototype" : {"href" : "/prototype/FedCA"},
+                           "properties" : {"position" : "2230A"}}]},
+              {"name" : "B",
+               "team" : "B",
+               "units" : [{"id" : "Kli D7",
+                           "prototype" : {"href" : "/prototype/KliD7"},
+                           "properties" : {"position" : "2201D"}}]}],
+ "victory" : {"A" : [{"action" : ["destroy", "cripple", "accept-surrender"],
+                      "target" : ["Kli D7"]}],
+              "B" : [{"action" : ["destroy", "cripple", "accept-surrender"],
+                      "target" : ["Fed CA"]}]}
+}
+          
+                           

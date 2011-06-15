@@ -1,0 +1,5 @@
+map tokens observe unit position
+shuttle acceleration-limit observes unit-status
+announcer observes unit messages
+logger observes all updates
+tractored unit observed tractoring unit position and vice versa

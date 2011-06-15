@@ -1,0 +1,30 @@
+from jolly.command import CommandTemplate, FormalArgument
+from jolly.system import Unit
+from jolly.map import Bearing
+
+class Move(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True),
+                     FormalArgument('bearing', Bearing, can_change=True)]
+        super(Move, self).__init__('move', 'move', arguments)
+
+    def validate_for_queue(self, command, queue, env=None):
+        super(Move, self).validate_for_queue(command, queue, env)
+        unit = command.arguments['unit']
+        if not unit.get_state('speed-plot').has_move(command.time):
+            raise InvalidTime(command.time)
+
+    def validate_for_execute(self, command, env=None):
+        super(Move, self).validate_for_execute(command, env)
+        unit = command.arguments['unit']
+        bearing = command.arguments['bearing']
+        if not unit.use_as('movement').can_move(command.time.impulse, bearing):
+            raise InvalidArgument('bearing')
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        bearing = command.arguments['bearing']
+        position = unit.use_as('movement').get_destination(bearing)
+        unit.update('position', position) 
+        # turn and slip modes should be updated

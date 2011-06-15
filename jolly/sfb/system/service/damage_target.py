@@ -1,0 +1,31 @@
+from jolly.system import Service, PropertyDefinition
+from jolly.resource import ResourceType
+from jolly.map import LocationMask as FiringArc
+from sfb.damage import damage
+
+class DamageTarget(Service):
+    """Provides the ability to be damaged."""
+
+    
+    def __init__(self, damaged_as, damaged_by=damage):
+        props = [PropertyDefinition('damage-arc', FiringArc, False),
+                 PropertyDefinition('damage-status', basestring, True, 'undamaged', lambda x: x in ['undamaged', 'destroyed'])]
+        super(DamageTarget, self).__init__('damage-target', props)
+        self._damaged_as = damaged_as
+        self._damaged_by = damaged_by
+
+    def is_damageable(self, system):
+        return system.get_property('damage-status') == 'undamaged'
+
+    def is_damageable_as(self, system, system_type):
+        return system_type in self._damaged_as
+
+    def is_damageable_by(self, system, damage_type):
+        return damage_type.is_usable_as(self._damaged_by)
+
+    def is_damageable_from(self, system, location):
+        damage_arc = system.get_property('damage-arc')
+        return True if damage_arc is None else (location in damage_arc)
+
+    def apply_damage(self, system):
+        system.update('damage-status', 'destroyed')

@@ -1,0 +1,28 @@
+These objects need to be able to be put in the database:
+
+Player
+ - name
+ - units
+User
+ - email
+ - password
+ - players
+Game
+ - map
+ - players
+ - command queue
+ - last command
+Map
+ - bounds
+ - tokens
+CommandQueue
+Command
+
+Key objects on URL = id
+users -> dict(id : user)
+players -> dict(id : player)
+games -> dict(id : game)
+units -> dict(id : unit)
+
+
+

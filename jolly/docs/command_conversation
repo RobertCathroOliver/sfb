@@ -1,0 +1,48 @@
+POST to: /g/?/commands
+
+if unauthenticated -> 401
+if not validly formatted -> 400
+ e.g. malformed XML, or malformed JSON
+if has bad data -> 400
+ e.g. provide response with acceptable data kept.  required data indicated.  other data discarded
+if not authorized -> 401
+if OK -> 201
+
+post:
+nothing
+-or-
+<command></command>
+{'command'}
+-or-
+malformed data
+response:
+<command template_href="/command-templates/?"></command>
+{'command' : {'template_href' : '/command-templates/?'}}
+
+
+post:
+<command template_href="/command-templates/move"></command>
+{'command' : {'template_href' : '/command-templates/move'}}
+response:
+<command template_href="/command-templates/move">
+  <parameters>
+    <parameter name="time" mandatory="true" received="" error="Mandatory parameter omitted.">\d+\.[1-9]|[12][0-9]|3[0-2]\.move</parameter>
+    <parameter name="source" mandatory="true" received="" error="Mandatory parameter omitted.">/g/1/units/?</parameter>
+    <parameter name="bearing" received="">turn-left|turn-right|straight|slip-left|slip-right</parameter>
+</command>
+{'command' : {'template_href' : '/command-templates/move',
+              'parameters' : {'time' : {'mandatory' : true,
+                                        'received' : '',
+                                        'error' : 'Mandatory parameter omitted.',
+                                        'value' : '\d+\.[1-9]|[12][0-9]|3[0-2]\.move'},
+                              'source' : {'mandatory' : true,
+                                          'received' : '',
+                                          'error' : 'Mandatory parameter omitted.',
+                                          'value' : '/g/1/units/?'},
+                              'bearing' : {'received' : '',
+                                           'value' : 'turn-left|turn-right|straight|slip-left|slip-right'}}}}
+
+authorization for posting is determined by 'source' parameter and issuer
+issuer is determined by authentication
+issuer must be a Player
+

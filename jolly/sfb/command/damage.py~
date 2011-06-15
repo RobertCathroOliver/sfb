@@ -1,0 +1,30 @@
+"""Damage application commands."""
+
+from jolly.command import CommandTemplate, FormalArgument
+from jolly.system import Unit
+from jolly.resource import ResourceType, ResourcePool
+from sfb.map import Location
+from sfb.damage import Allocator
+
+class AllocateDamage(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('target', Unit, upfront=True),
+                     FormalArgument('source', Unit, upfront=True),
+                     FormalArgument('damage', ResourcePool, upfront=True, can_change=True)]
+        super(AllocateDamage, self).__init__('allocate-damage', 'allocate-damage', arguments)
+
+    def execute(self, command, env=None):
+        target = command.arguments['target']
+        source = command.arguments['source']
+        damage = command.arguments['damage']
+        damage_rules = target.get_parameter('damage-rules')
+        choice = env['choice']
+
+        incident = get_relative_location(source.get_state('position'), target.get_state('position'))
+        allocator = Allocator(damage_rules, choice)
+        for damage_type in damage:
+            systems = allocator.find_target(target, incident, damage_type)
+            system = systems[0] # must get user input if more than one (different) option
+            allocator.allocate(system)
+            # check for destruction

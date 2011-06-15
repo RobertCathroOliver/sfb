@@ -1,0 +1,63 @@
+URL structure
+
+/g/
+<collection>
+  <member title="Game 1" href="http://example.org/g/1" />
+  <member title="Game 2" href="http://example.org/g/2" />
+  <member title="Game 3" href="http://example.org/g/3" />
+  <member title="Game 4" href="http://example.org/g/4" />
+</collection>
+
+/g/{n}
+<game>
+  <map href="http://example.org/map/1" />
+  <player title="Player 1" href="http://example.org/player/1" />
+  <player title="Player 2" href="http://example.org/player/2" />
+</game>
+
+/user/
+<collection>
+  <member title="username1" href="http://example.org/user/1" />
+  <member title="username2" href="http://example.org/user/2" />
+  <member title="username3" href="http://example.org/user/3" />
+</collection>
+
+/user/{username}
+<user name="user1"
+      email="user1@example.org">
+  <player title="Player 1" href="http://example.org/player/1" />
+</user>
+
+/player/{n}
+<player>
+  <game title="Game 1" href="http://example.org/g/1" />
+  <unit title="Unit 1" href="http://example.org/unit/1" />
+</player>
+
+/unit/{n}
+<unit>
+  <player title="Player 1" href="http://example.org/player/1" />
+  <system title="Phaser-1" href="http://example.org/system/1" />
+  <system title="Forward Hull" href="http://example.org/system/2" />
+</unit>
+
+/system/{n}
+<system>
+  <prototype title="Phaser-1" href="http://example.org/system-type/phaser1" />
+  <property title="damage-status">undamaged</property>
+  <property title="firing-arc">FA</property>
+</system>
+
+/map/{n}
+<map width="42" height="30">
+  <token position="1223A">http://example.org/unit/1</token>
+</map>
+
+/command/{n}
+<command status="queued">
+  <template href="http://example.org/command-templates/move" />
+  <parameter title="time">1.4.move</parameter>
+  <parameter title="source">http://example.org/unit/1</parameter>
+  <parameter title="bearing">turn-clockwise</parameter>
+</command>
+

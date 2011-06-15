@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<link type="text/css" href="file:///C:/Users/rcathro-oliver/Documents/jolly/css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="Stylesheet" />
+	<script type="text/javascript" src="file:///C:/Users/rcathro-oliver/Documents/jolly/scripts/speed_plot.js"></script>
+	<script type="text/javascript" src="file:///C:/Users/rcathro-oliver/Documents/jolly/scripts/map.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+	    $(function() {
+//		    var sl = [{ speed: 10, end: 8 }, {speed: 20, end: 16}, {speed: 16, end: 31}];
+//		    var plot = new SpeedPlot(sl);
+//		    $('#speedplot_container').offset({top: 530, left: 8});
+//		    plot.draw('#speedplot_container');
+
+                    var img = new Image();
+		    img.src = "file:///C:/Users/rcathro-oliver/Documents/jolly/test/arrow.png";
+		    var tokens = [new Token(img, new Position(8, 6, 'A'))];
+		    var map = new Map(42, 30, tokens);
+		    map.draw_labels = true;
+		    $('#map_container').offset({top: 8, left: 8});
+		    map.draw('#map_container');
+		    });
+	</script>
+	<title>Testing Speed Plot</title>
+	<style>
+	    .map {
+		position: absolute;
+
+		width: 512px;
+
+		padding: 1px;
+		border: 2px solid black;
+		-webkit-border-radius: 7px; 
+		-moz-border-radius: 7px;
+		margin: 0px;
+
+		background-color: white;
+	    }
+	    .map div {
+		overflow: auto;
+		margin: 1px;
+
+		width: 512px;
+		height: 512px;
+	    }
+
+	    .speedplot {
+		position: absolute;
+
+		width: 512px;
+		height: 29px;
+
+		padding: 1px;
+		border: 2px solid black;
+		-webkit-border-radius: 7px; 
+		-moz-border-radius: 7px; 
+		margin: 0px;
+
+		text-align: center; 
+		font-family: Verdana, Arial, Helvetica, sans-serif; 
+		font-size: 8px; 
+
+		cursor: default;
+		background-color: white;
+	    }
+	    .speedplot div.speeds {
+		float: left; 
+		
+		height: 14px;
+		line-height: 14px; 
+
+		background-color: #99FF66;
+
+		-webkit-border-radius: 7px; 
+		-moz-border-radius: 7px; 
+		margin-left: 1px;
+		margin-right: 1px;
+	    }
+	    .speedplot div.speeds:hover {
+		background-color: red;
+	    }
+
+	    .speedplot div.moves { 
+		float: left; 
+		margin-top: 1px;
+	    }
+	    .speedplot div.moves div { 
+		float: left; 
+		
+		width: 14px; 
+		height: 14px; 
+		line-height: 14px; 
+		
+		-webkit-border-radius: 7px; 
+		-moz-border-radius: 7px; 
+		margin-left: 1px; 
+		margin-right: 1px; 
+	    }
+	    .speedplot div.moves div.move { 
+		background-color: #99FF66; 
+	    }
+	</style>
+    </head>
+    <body>
+	<!--<div id="speedplot_container">
+	</div>-->
+	<div id="map_container">
+	</div>
+    </body>
+</html>

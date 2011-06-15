@@ -1,0 +1,78 @@
+Atom Collections
+
+media types for:
+system
+command
+map
+energy allocation
+speed plot
+
+
+system:
+id = URI
+template = URI
+properties
+  name
+  value
+subsystems
+  name
+  id = URI
+exposed commands
+  name
+
+e.g.:
+<system id="/g/1/system/1" template_href="/system-templates/phaser-1">
+  <properties>
+    <property name="firing-arc">FA</property>
+    <property name="status">undamaged</property>
+    <property name="last-use">1.1.direct-fire</property>
+    <property name="capacitor">/g/1/system/2</property>
+  </properties>
+</system>
+
+command:
+id = URI
+command template = URI
+time
+parameters
+  name
+  value
+
+e.g.:
+<command id="g/1/command/1" template_href="/command-templates/move">
+  <parameters>
+    <parameter name="time">1.4.move</parameter>
+    <parameter name="source">/g/1/units/1</parameter>
+    <parameter name="bearing">turn-clockwise</parameter>
+  </parameters>
+</command>
+
+command template:
+<command-template id="/commmand-templates/move" step="move">
+  <formal-parameters>
+    <formal-parameter name="source">/g/1/units</formal-parameter>
+    <formal-parameter name="bearing">
+      <option>straight</option>
+      <option>turn-clockwise</option>
+      <option>turn-counterclockwise</option>
+      <option>slip-left</option>
+      <option>slip-right</option>
+    </formal-parameter>
+  </formal-parameters>
+</command-template>
+
+map:
+id = URI
+width
+height
+tokens:
+  position
+  unit = URI
+
+e.g.:
+<map id="/g/1/map" width="42" height="30">
+  <tokens>
+    <token id="/g/1/unit/3">1032D</token>
+    <token id="/g/1/unit/5">1033A</token>
+  </tokens>
+</map>

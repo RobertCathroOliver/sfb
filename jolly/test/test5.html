@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<link type="text/css" href="http://localhost:8000/css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="Stylesheet" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="http://localhost:8000/scripts/sfb.js"></script>
+	<script type="text/javascript" src="http://localhost:8000/scripts/window.js"></script>
+
+	<script type="text/javascript">
+	    $(function() {
+		    var text = "<div>;asldkfjalksdjflaksjdklfja;lskdjf;alskdjflk;asjdfl;akjsdl;fkjalsdjf;laksjdfl;aksjdfl;akjsd;lfkjal;skdjf;alskdjf;alskdjf;alskdjfk;laskdjfl;aksdjfl;aksdjf;laksjdf;lakjsdf;lkja;sdfl;askjdfl;aksjd;flkjal;sdjfl;aksjdfl;kajsdkl;fjla;sjdfl;aksjkdf;alskdjfa;klsdjf;alksdjf;alskdjfa;sldkjf;asldkfja;sldkfja;slkdfjaklsdjf;alksjdf;laksjdfl;aksjdf;laksjdf</div>";
+		    var w1 = SFB.Window.create('#window1', text, {'scrollable': true});
+		  w1.width = 200;
+		  w1.height = 300;
+		  var w2 = SFB.Window.create('#window2', 'Here I am!');
+		  w2.width = 200;
+		  w2.height = 300;
+              });
+	</script>
+	<title>Testing Window</title>
+	<style>
+	    .window {
+		overflow: hidden;
+
+		padding: 1px;
+		border: 2px solid black;
+		-webkit-border-radius: 7px; 
+		-moz-border-radius: 7px;
+		margin: 0px;
+
+		background-color: white;
+	    }
+	    .window > div.scrollable {
+		overflow: auto;
+		margin: 1px;
+	    }
+	</style>
+    </head>
+    <body>
+	<div id="window1"></div>
+	<div id="window2"></div>
+    </body>
+</html>

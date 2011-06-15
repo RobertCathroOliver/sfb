@@ -1,0 +1,280 @@
+Main (GET)
+- list of users uri
+- list of games uri
+{'users': [{'uri': 'http://...'}, ...],
+ 'games': [{'uri': 'http://...'}, ...]}
+
+Users (GET, POST)
+- list of user uris
+* POST creates a new user
+* POST requires a username, email and a password.
+{'actions': {'create': {'uri': 'http://...'}},
+ 'users': [{'uri': 'http://...'}, ...]}
+
+User (GET, PUT, DELETE)
+- username
+- email
+- password (obfuscated)
+- list of player uris
+* PUT can be used to change the username, email, or password
+* PUT cannot change player uris, but they must be provided
+* DELETE removes the user account and disassociates it from any players
+{'actions': {'update': {'uri': 'http://...'},
+             'delete': true},
+ 'username': 'NAME',
+ 'email': 'EMAIL@EMAIL.COM',
+ 'players': [{'uri': 'http://...'}, ...]}
+* CREATE TEMPLATE
+{'username': {'_type': 'string'},
+ 'email': {'_type': 'email'},
+ 'password': {'_type', 'string'},
+ 'players': {'_type': 'array', 'options': {'_type': 'uri', 'options': {'uri': 'http://...'}}}}
+* UPDATE TEMPLATE
+{'username': {'_type': 'string'},
+ 'email': {'_type': 'email'},
+ 'password': {'_type': 'string'},
+ 'players': {'_type': 'array', 'options': {'_type': 'uri', 'options': {'uri': 'http://...'}}}}
+
+Games (GET, POST)
+- list of game uris
+* POST creates a new game
+* POST requires a title, a scenario uri, and a list of (unit identifiers, ssds)
+{'actions': {'create': {'uri': 'http://...'}},
+ 'games': [{'uri': 'http://...'}, ...]}
+
+Game (GET, DELETE)
+- title
+- scenario uri
+- owner uri [user]
+- map uri
+- time
+- list of player uris
+- message log uri
+* DELETE removes the game and all associated content and disassociates any players from users
+* DELETE may only be performed by the owner
+{'actions': {'delete': true},
+ 'title': 'TITLE',
+ 'scenario': {'uri': 'http://...'},
+ 'owner': {'uri': 'http://...'},
+ 'map': {'uri': 'http://...'},
+ 'time': {'time': 'TIME'},
+ 'players': [{'uri': 'http://...'}, ...]
+ 'messages': {'uri': 'http://...'}}
+*CREATE TEMPLATE
+{'title': {'_type': 'string'},
+ 'scenario': {'_type': 'uri', 'options': {'uri': 'http://...'}},
+ 'units': [{'_type': 'object',
+            'options': {'id': {'_type': 'string'},
+                        'unit': {'_type': 'uri', 'options': {'uri': 'http://...#units'}}}]}
+
+Map (GET)
+- width
+- height
+- list of tokens
+  - identifier
+  - position
+{'width': WIDTH,
+ 'height': HEIGHT,
+ 'tokens': [{'id': 'ID', 'position': 'POSITION'}, ...]}
+
+Message Log (GET, POST)
+- game uri
+- list of messages
+  - time
+  - owner uri [player]
+  - title
+  - message text
+* POST adds a message
+* POST requires a title and message text.  Time is optional and will default to the current time
+* POST can only be performed by a user with a player in the game
+{'actions': {'create': {'uri': 'http://...'}},
+ 'game': {'uri': 'http://...'},
+ 'messages': [{'time': {'time': 'TIME'}, 
+               'owner': {'uri': 'http://...'}, 
+               'title': 'TITLE',
+               'text': 'TEXT'}, ...]}
+* CREATE TEMPLATE
+{'time': {'_type': 'time', 'optional': true},
+ 'owner': {'_type': 'uri', 'options': {'uri': 'http://...#players'}},
+ 'title': {'_type', 'string'},
+ 'text': {'_type': 'string'}}
+
+Player (GET)
+- name
+- game uri
+- user uri
+- list of unit uris
+- command queue uri
+{'name': 'NAME',
+ 'game': {'uri': 'http://...'},
+ 'user': {'uri': 'http://...'},
+ 'command-queue': {'uri': 'http://...'},
+ 'units': [{'uri': 'http://...'}, ...]}
+
+Scenarios (GET)
+- list of scenario uris
+[{'uri': 'http://...'}, ...]
+
+Scenario (GET)
+- title
+- list of teams
+  - identifier
+  - name
+  - list of victory conditions
+    - action
+    - target
+- list of units
+  - identifier
+  - team
+  - unit roster uri (i.e. subset of unit prototypes)
+- map
+  - width
+  - height
+  - list of tokens
+    - identifier
+    - position
+{'title': 'TITLE',
+ 'teams': [{'id': 'TEAMID',
+            'name': 'NAME',
+            'victory': [{'action': 'ACTION',
+                         'target': 'TARGET'}]}, ...],
+ 'units': [{'id': 'UNITID',
+            'team': 'TEAMID',
+            'roster': {'uri': 'http://...'}}, ...],
+ 'map': {'width': WIDTH,
+         'height': HEIGHT,
+         'tokens': [{'id': 'UNITID', position: 'POSITION'}, ...]}}
+
+Unit (GET)
+- identifier
+- prototype uri
+- owner uri [player]
+- list of subsystem uris
+- list of properties [some private]
+  - name
+  - value
+{'id': 'UNITID',
+ 'prototype': {'uri': 'http://...'},
+ 'player': {'uri': 'http://...'},
+ 'subsystems': [{'uri': 'http://...'}, ...],
+ 'properties': {'PROPERTYNAME': 'PROPERTYVALUE', ...}}
+
+System (GET)
+- identifier
+- prototype uri
+- parent uri [unit]
+- list of properties [some private]
+  - name
+  - value
+{'id': 'SYSTEMID',
+ 'prototype': {'uri': 'http://...'},
+ 'parent': {'uri': 'http://...'},
+ 'properties': {'PROPERTYNAME': 'PROPERTYVALUE', ...}}
+
+Command Queue (GET, POST) [private]
+- owner uri [player]
+- list of command uris
+* POST adds a new command
+* POST requires a time, command template uri, and argument list
+* POST requires that the user be the owner of the Command Queue
+{'actions': {'create': {'uri': 'http://...'}},
+ 'commands': [{'uri': 'http://...'}, ...]}
+
+Command (GET, PUT, DELETE) [private]
+- owner uri [player]
+- time
+- command template uri
+- list of arguments
+  - name
+  - value
+* PUT can be used to change argument values for arguments that can be changed
+* PUT requires that the user be the owner of the Command
+* DELETE cancels the command
+* DELETE can only be issued by the owner
+{'actions': {'update': {'uri': 'http://...'},
+             'delete': true},
+ 'owner': {'uri': 'http://...'},
+ 'time': {'time': 'TIME'},
+ 'template': {'uri': 'http://...'},
+ 'arguments': {'ARGUMENTNAME': 'ARGUMENTVALUE', ...}}
+* CREATE TEMPLATE
+{'owner': {'_type': 'uri', 'options': {'uri': 'http://...#players'}},
+ 'time': {'_type': 'time', 'options': '\d+.\d+.STEP'},
+ 'template': {'uri': 'http://...'},
+ 'arguments': {'ARGUMENTNAME': {'_type': 'ARGUMENTTYPE',
+                                'options': 'ARGUMENTCHOICES'}}}
+* UPDATE TEMPLATE
+* only provide options for things that can change
+{'owner': {'uri': 'http://...'},
+ 'time': {'time': 'TIME'},
+ 'template': {'uri': 'http://...'},
+ 'arguments': {'ARGUMENTNAME': {'_type': 'ARGUMENTTYPE',
+                                'options': 'ARGUMENTCHOICES'}}}
+
+Template Rules
+The template is a JSON object.
+Template objects are objects with a key of '_type'.
+The type of the template is the value associated with '_type'.
+Template objects may also have 'optional' and 'options' keys.
+If the 'optional' key exists and is true, the key-value pair associated with the template object does not have to appear in the result.
+If the 'options' key exists it specifies that the value in the key-value pair is restricted to the given options.  The options must be an array, or a uri that points to an array, or a regular expression (expressed as a JSON string), or an object.  Unless the 'optional' key exists, one option must be provided.
+
+The following template types are recognized:
+string - any JSON string
+email - any email address as a JSON string
+uri - an object of the form {'uri': 'URI'} where URI is the uri of the resource
+time - an object of the form {'time': 'TURN.IMPULSE.STEP'} or {'time': TURN.STEP} where 'TURN.IMPULSE.STEP' and 'TURN.STEP' are JSON strings.
+object - a JSON object which may (or may not) contain further template objects
+array - a JSON array
+
+The template rules do not provide a complete set of restrictions on inputs.  Responses should provide sufficiently detailed error messages to diagnose any errors.
+
+Standard Responses
+GET
+Success 
+- 200 OK + Resource
+Failure
+- 401 Unauthorized + Nothing
+- 404 Not Found + Nothing
+- 405 Method Not Allowed + Nothing
+
+POST
+Success
+- 201 Created + GET of resource
+Failure
+- 400 Bad Request + {'submital': SUBMITTED,
+                     'errors': [{'error': {'uri': 'http://...'},
+                                 'message': 'MESSAGE'}, ...]}
+- 401 Unauthorized + Nothing
+- 404 Not Found + Nothing
+- 405 Method Not Allowed + Nothing
+
+PUT
+Success
+- 200 OK + GET of resource
+Failure
+- 400 Bad Request + {'submital': SUBMITTED,
+                     'errors': [{'error': {'uri': 'http://...'},
+                                 'message': 'MESSAGE'}, ...]}
+- 401 Unauthorized + Nothing
+- 404 Not Found + Nothing
+- 405 Method Not Allowed + Nothing
+- 409 Conflict + {'submital': SUBMITTED,
+                     'errors': [{'error': {'uri': 'http://...'},
+                                 'message': 'MESSAGE'}, ...]}
+
+DELETE
+- 200 OK + Nothing
+Failure
+- 401 Unauthorized + Nothing
+- 405 Method Not Allowed + Nothing
+
+What I Need to Do:
+- JSON conversion for objects
+- Object lists
+- Object queries and uri parameters
+- HTTP responses
+
+JSON Schema
+- generate JSON schema values for update requests
+

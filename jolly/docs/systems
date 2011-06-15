@@ -1,0 +1,52 @@
+Systems
+
+Systems provide the functionality of units within the game.
+Systems provide services and have state.
+
+How do we want to use systems?
+Some examples are in order.
+
+e.g. Left Warp Engine
+
+e.g. Phaser-1
+ph1 = Phaser1(firing_arc=ForwardArc)
+ph1.fire(range, random_number_generator)
+ph1.energize(energy)
+ph1.damage()
+ph1.repair(Phaser3)
+
+def Phaser1(**kwargs):
+    phaser1 = System('Phaser1', services=services, properties=properties)
+    return phaser1
+
+fire = DirectFireWeapon(range_map)
+
+def service_capability(fn):
+    fn.service_capability = True
+    return fn
+    
+class DirectFireWeapon(object):
+    def __init__(self, range_map):
+        self.range_map = range_map
+
+    @service_capability
+    def fire(self, range, random_number_generator):
+        return self.range_map[range][random_number_generator(1, 6)]
+
+class System(object):
+    def __init__(self, name, services):
+        self.name = name
+        self.services = []
+        for s in services:
+            self.add_service(s)
+
+    def add_service(service):
+        self.services.append(service)
+        for (name, fn) in service.__class__.__dict__.items():
+            if hasattr(fn, 'service_capability') and fn.service_capability:
+                self.__dict__[name] = fn
+
+
+        
+        
+

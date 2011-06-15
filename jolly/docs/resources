@@ -1,0 +1,46 @@
+I need a system for handling resources.
+
+Resources need:
+1. An identifier (URI)
+2. A representation (JSON or XML)
+3. Persistence (in a DB)
+4. Behaviour response (HTTP verbs)
+
+1. Identifiers
+Each accessible object in the domain has an identifier.
+These objects are accessible:
+  game, player, user
+  unit, map
+  timeline, breakpoint, command
+  ssd, system
+  energy allocation, speed plot
+
+These objects have a value, but no identifier:
+  location, direction, position
+  time
+
+2. Representations
+Equivalent XML and JSON representations exist for each resource.
+For some resources, an aggregate representation with identifiers to its members may be available.
+Values have their own representation.
+location - 4-digit coordinates (xxyy)
+direction - alphabetic identifier (A, B, C, D, E, F)
+position - location + direction (e.g. 0323C)
+time - turn.phase or turn.impulse.phase (e.g. 2.energy-allocation or 2.3.movement)
+
+3. Persistence
+Each resource can be persisted to a database and retrieved.
+A unique identifier (perhaps the URI, or some part of it) is required to establish resource identity.
+
+4. Behaviours
+Each resource can respond to at least some of the HTTP verbs GET, PUT, POST, DELETE.
+All resources can respond to GET.
+Commands can respond to all verbs although some verbs may be forbidden at some times.
+Breakpoints can respond to all verbs.
+Aggregates respond to GET and POST.
+Other resources respond to GET, PUT and DELETE.
+Domain logic may be triggered by a verb.
+Domain logic is keyed to event handlers.
+OnCreating, OnCreated, OnUpdating, OnUpdated, OnDeleting, OnDeleted
+
+

@@ -1,0 +1,33 @@
+from jolly.system import Service, FormalParameter
+from jolly.map import Position
+from sfb.movement import TurnMode, SpeedPlot, AccelerationLimit, make_speed_plot
+from sfb.command import registry as commands
+
+class Movement(Service):
+    """Provide the ability for a Unit to move on a map."""
+
+    def __init__(self):
+        props = [FormalParameter('turn-mode', TurnMode),
+                 FormalParameter('acceleration-limit', AccelerationLimit, True),
+                 FormalParameter('turn-mode-counter', int, True, 0),
+                 FormalParameter('sideslip-mode-counter', int, True, 0),
+                 FormalParameter('speed-plot', SpeedPlot, True),
+                 FormalParameter('prev-speed-plot', SpeedPlot, False),
+                 FormalParameter('position', Position, True)]
+        super(Movement, self).__init__('movement', props, [commands['shuttle-determine-initial-speed'], commands['announce-emergency-deceleration']])
+
+    def can_move(self, system, impulse, bearing):
+        speed_plot = system.get_property('speed-plot')
+        speed = speed_plot.get_speed(impulse)
+        if bearing.is_rotation():
+            turn_mode = system.get_property('turn-mode')
+            turn_mode_counter = system.get_property('turn-mode-counter')
+            return turn_mode.is_fulfilled(turn_mode_counter, speed)
+        if bearing.is_straight(system.get_property('position')):
+            sideslip_mode_counter = system.get_property('sideslip-mode-counter')
+            return sideslip_mode_counter > 0
+        return True
+
+    def get_destination(self, system, bearing):
+        return system.get_property('position') + bearing
+

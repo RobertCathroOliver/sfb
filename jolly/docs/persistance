@@ -1,0 +1,5 @@
+There is a mapping between URLs and objects/object lists.
+
+/uncamelize(class_name)/ - list of objects of given class
+/uncamelize(class_name)/id - object with id of given class
+

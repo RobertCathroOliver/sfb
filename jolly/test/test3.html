@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<link type="text/css" href="file:///C:/Users/rcathro-oliver/Documents/jolly/css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="Stylesheet" />
+	<script type="text/javascript" src="file:///C:/Users/rcathro-oliver/Documents/jolly/scripts/speed_plot.js"></script>
+	<script type="text/javascript" src="file:///C:/Users/rcathro-oliver/Documents/jolly/scripts/map.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+	    $(function() {
+		    // same origin policy was biting me badly
+		    $.get('http://localhost:8000/sfb/config/sequence-of-play.xml', function(data, status, xmlhttp) {
+			var children = $(data).children('phase');
+			    });
+		    });
+	</script>
+	<title>Testing SOP</title>
+	<style>
+	</style>
+    </head>
+    <body>
+	<div id="sop_container"></div>
+    </body>
+</html>

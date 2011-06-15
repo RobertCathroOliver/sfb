@@ -1,0 +1,199 @@
+This needs to be updated
+ - use the annex from Advanced Missions
+
+tractor-auction
+[queued by tractor-link]
+  tractor-link
+  energy -> allocated energy
+
+energy-allocation
+[queued by energy-allocation service]
+?
+
+damage-repair-allocation
+[queued by player, can be cancelled]
+?
+
+announce-engine-doubling (issue one for each engine)
+[queued by energy allocation]
+
+resolve-pa-panel-energy-release
+?
+
+announce-unpowered-shields
+[queued by energy allocation]
+
+announce-initial-speed
+[queued by energy allocation OR set by shuttles]
+  unit
+  speed-plot
+
+determine-lock-on
+[queued by energy allocation, can be cancelled]
+
+re-acquire-lock-on-cloak
+[queued by energy allocation, can be cancelled]
+
+tractor-rotation
+[queued by tractor-link, can be cancelled]
+  tractor-link
+  direction
+
+assign-boarding-party-guards
+[queued by player, can be cancelled]
+
+assign-for-reload
+[queued by player, can be cancelled]
+
+move
+[queued by speed-plot, terrain, etc.]
+
+resolve-ESG
+[queued by ESG]
+
+resolve-EPT
+[queued by EPT]
+
+resolve-seeking-weapons
+[queued by seeking weapons]
+
+resolve-web-deceleration
+[queued by web]
+
+resolve-mines
+[queued by mines]
+
+release-from-tractor
+[queued by tractor]
+
+announce-speed-changes
+[queued by speed-plot]
+
+tholian-web-passage-status
+[queued by player]
+
+emergency-deceleration
+[queued by announce-emergency-deceleration]
+
+voluntary-change-fire-control
+[queued by player]
+
+cloaking-device
+[queued by player]
+
+determine-cloaking-lock-on
+[queued by cloaking device]
+
+voluntary-tractor
+[queued by player]
+
+lab-identification
+[queued by player]
+
+voluntary-release-seeking-weapon-control
+[queued by player]
+
+launch-plasma-torpedoes
+[queued by player]
+
+launch-drones
+[queued by player]
+
+drop-chaff
+[queued by player]
+
+ESG-step
+[queued by player]
+
+drop-restore-shields
+[queued by player]
+
+shield-cracker-step
+[queued by player]
+
+operate-transporters
+[queued by player]
+
+assign-guards
+[queued by player]
+
+activate-transporter-bombs
+[queued by operate-transporters]
+
+dogfight-challenge
+[queued by player]
+
+recover-shuttles
+[queued by player]
+
+launch-shuttles
+[queued by player]
+
+deck-crew-actions
+[queued by player]
+
+lay-mine
+[queued by player]
+
+announce-emergency-deceleration
+[queued by player]
+
+announce-displacement-device
+[queued by player]
+
+decide-direct-fire
+[queued by player]
+
+announce-direct-fire
+[queued by decide-direct-fire]
+
+resolve-PPD
+[queued by decide-direct-fire]
+
+resolve-hellbore-1
+[queued by decide-direct-fire]
+
+resolve-other-weapons
+[queued by decide-direct-fire]
+
+resolve-hellbore-2
+[queued by decide-direct-fire]
+
+web-becomes-effective
+[queued by web-casters-fire]
+
+web-casters-fire
+[queued by decide-direct-fire]
+
+web-dissipates
+[queued by web-becomes-effective]
+
+allocate-damage
+[queued by resolve-PPD, resolve-hellbore-1, resolve-other-weapons, resolve-hellbore-2, web-casters-fire]
+
+operate-displacement-device
+[queued by announce-displacement-device]
+
+release-from-tractor
+[queued by allocate-damage]
+
+announce-damage-repair
+[queued by damage-repair-allocation]
+
+repair-shields
+[queued by energy-allocation]
+
+reserve-power-to-phaser-capacitors
+[queued by player]
+
+pa-panel-to-battery
+[queued by player]
+
+pa-panel-power-dissipates
+[queued by PA panels]
+
+engine-doubling-damage
+[queued by energy-allocation]
+
+drone-rack-loading
+[queued by assign-for-reload]

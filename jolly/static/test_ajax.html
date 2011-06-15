@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+	<script type="text/javascript">
+	    function submit(url) {
+		var method = $('input[name="method"]:checked').val();
+		var data = $('textarea[name="data"]').val()
+		var settings = 
+		   {//'accepts': 'application/json',
+		    'cache': false,
+                    'contentType': 'application/json',
+		    'data': data,
+		    'dataType': 'json',
+		    'type':method,
+		    'url': 'http://127.0.0.1:8000/' + url,
+		    'success': function(data, textStatus, jqXHR) {
+			var re = /"href":"([^"]*)"/g;
+			var d = JSON.stringify(data).replace(re, '"href":"<a href="#" onclick="submit(\'$1\'); return false;">$1</a>"');
+			$('#result').html(d);
+		        $('#url').val(url);
+		    },
+		    'error': function(jqXHR, textStatus, errorThrown) {
+			$('#result').html(jqXHR.responseText);
+		        $('#url').val(url);
+		    }};
+		$.ajax(settings);
+	    }
+	</script>
+	<title>Testing AJAX</title>
+    </head>
+    <body>
+	<form>
+	    URL: http://127.0.0.1:8000/<input id="url" type="text" name="url" /><br />
+	    <input type="radio" name="method" value="GET" checked="checked" />GET<br />
+	    <input type="radio" name="method" value="PUT" />PUT<br />
+	    <input type="radio" name="method" value="POST" />POST<br />
+	    <input type="radio" name="method" value="DELETE" />DELETE<br />
+	    Data: <br /><textarea name="data"></textarea><br />
+	</form>
+	<button onclick="submit($('#url').val());">Submit</button><br />
+	<div id="result">
+	The result goes here.
+        </div>
+    </body>
+</html>

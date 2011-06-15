@@ -1,0 +1,78 @@
+from jolly.command import CommandTemplate, FormalArgument, InvalidArgument
+from jolly.system import Unit
+from sfb.movement import SpeedPlot
+
+class AnnounceInitialSpeed(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True)]
+        super(AnnounceInitialSpeed, self).__init__('announce-initial-speed', 'announce-initial-speed', arguments)
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        speed_plot = unit.get_state('speed-plot')
+        speed = speed_plot.get_speed(0)
+        unit.update('message', ('announce-initial-speed', speed), True)
+
+class AnnounceSpeedChange(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True)]
+        super(AnnounceSpeedChange, self).__init__('announce-speed-change', 'announce-speed-change', arguments)
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        speed_plot = unit.get_state('speed-plot')
+        speed = speed_plot.get_speed(command.impulse)
+        unit.update('message', ('announce-speed-change', speed), True)
+
+class ShuttleDetermineInitialSpeed(AnnounceInitialSpeed):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True),
+                     FormalArgument('speed-plot', SpeedPlot, can_change=True)]
+        super(AnnounceInitialSpeed, self).__init__('shuttle-determine-initial-speed', 'announce-initial-speed', arguments, required=True)
+
+    def validate_for_execute(self, command, env=None):
+        super(ShuttleDetermineInitialSpeed, self).validate_for_execute(command, env)
+        unit = command.arguments['unit']
+        speed_plot = command.arguments['speed-plot']
+        acceleration_limit = unit.get_parameter('acceleration-limit')
+        prev_speed_plot = unit.get_state('prev_speed_plot')
+        if not speed_plot.is_valid(acceleration_limit, prev_speed_plot):
+            raise InvalidArgument('speed-plot')
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        speed_plot = command.arguments['speed-plot']
+        observer = speed_plot.get_update_observer(command.queue, unit, command.turn)
+        unit.add_observer('speed-plot', observer)
+        unit.update('speed-plot', speed_plot)
+        super(ShuttleDetermineInitialSpeed, self).execute(command, env)
+
+class EmergencyDeceleration(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True)]
+        super(EmergencyDeceleration, self).__init__('emergency-deceleration', 'emergency-deceleration', arguments)
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        speed_plot = unit.get_state('speed-plot')
+        new_speed_plot = speed_plot.get_altered_speed_plot(0, command.impulse)
+        unit.update('speed-plot', new_speed_plot)
+        unit.update('message', ('emergency-deceleration', None), True)
+        # need to also figure out energy to reinforcement
+
+class AnnounceEmergencyDeceleration(CommandTemplate):
+
+    def __init__(self):
+        arguments = [FormalArgument('unit', Unit, upfront=True)]
+        super(AnnounceEmergencyDeceleration, self).__init__('announce-emergency-deceleration', 'announce-emergency-deceleration', arguments)
+
+    def execute(self, command, env=None):
+        unit = command.arguments['unit']
+        delay = command.time + Duration(0, 2)
+        moment = get_moment(delay.turn, delay.impulse, 'emergency-deceleration')
+        cmd = Command(command, emergency_deceleration, moment, {'unit' : Unit})
+        cmd.queue = command.queue

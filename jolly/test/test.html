@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>Testing</title>
+	<script type="text/javascript" src="file:///C:/Users/rcathro-oliver/Documents/jolly/scripts/map.js"></script>
+	<script type="text/javascript">
+
+            var img = new Image();
+            img.src = "file:///C:/Users/rcathro-oliver/Documents/jolly/test/arrow.png";
+            var tokens = [new Token(img, new Position(8, 6, 'F'))];
+            var map = new Map(10, 8, tokens);
+            map.draw_labels = true;
+
+	    function init() {
+		canvas.addEventListener('click', get_position, true);
+	    }
+	    
+	    function draw() {
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                map.draw('#map_container');
+	    }
+            function move(position) {
+		var token = tokens[0];
+		token.move(position);
+		draw();
+	    }
+            function get_position(e) {
+		var x = e.clientX - canvas.offsetLeft;
+		var y = e.clientY - canvas.offsetTop;
+		var p = map.to_position(x, y);
+		move(p);
+		return false;
+	    }
+	</script>
+    </head>
+    <body onload="init(); draw();">	
+	<div id="map_container"></div>
+    </body>
+</html>

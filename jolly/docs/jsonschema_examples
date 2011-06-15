@@ -1,0 +1,71 @@
+{"title" : "move",
+ "type" : "object",
+ "properties" : {
+   "template" : {
+     "required" : true,
+     "type" : "string",
+     "format" : "uri",
+     "enum" : ["http://localhost/command-templates/move"]
+   },
+   "time" : {
+     "type" : "string",
+     "required" : true,
+     "pattern" : "^([1-9]|[1-9][0-9]+)\.([1-9]|[12][0-9]|3[0-2])\.move$"
+   },
+   "arguments" : {
+     "type" : "object"
+     "properties" : {
+       "unit" : {
+         "required" : true,
+         "type" : "string",
+         "format" : "uri",
+         "pattern" : "^http://localhost/units/[0-9a-f]{32}$"
+       },
+       "bearing" : {
+         "required" : false,
+         "type": "string",
+         "enum": ["straight", "cw", "ccw", "slip-cw", "slip-ccw"]
+       }
+     }
+   }
+ }
+}
+
+
+{"name": "user",
+ "properties": {
+   "username": {
+     "type": "string",
+     "description": "Display name"
+   },
+   "email": {
+     "type": "string",
+     "format": "email",
+     "description": "Email address"
+   },
+   "password": {
+     "type": "string",
+     "description": "Password for login",
+     "optional": true
+   },
+   "players": {
+     "description": "Players owned by this user"
+     "type": "array",
+     "items": {
+       "properties": {
+         "uri": {
+           "type": "string",
+           "format": "uri",
+           "enum": {"$ref": "http://.../players#"}
+         }
+       }
+     },
+     "default": []
+   }
+ },
+ "links": [
+   { "rel": "players", 
+     "href": "/players?owner_id={id}", 
+     "targetSchema": "/schema/players" }
+ ]
+}

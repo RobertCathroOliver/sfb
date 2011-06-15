@@ -1,0 +1,28 @@
+from jolly.system import Service, FormalParameter
+from jolly.map import LocationMask as FiringArc
+from jolly.resource import ResourcePool
+from sfb.damage import damage
+from sfb.command import registry as commands
+
+class DirectFire(Service):
+    """Provides the ability to fire as a direct fire weapon."""
+
+    def __init__(self, damage_lookup, damage_type=damage, 
+                       resolution_template=commands['resolve-other-weapons']):
+        props = [FormalParameter('firing-arc', FiringArc)]
+        super(DirectFire, self).__init__('direct-fire', props, exposed_commands=[commands['decide-direct-fire']])
+        self._damage_lookup = damage_lookup
+        self._damage_type = damage_type
+        self._resolution_template = resolution_template
+
+    def get_resolution_template(self, system):
+        return self._resolution_template
+
+    def can_target(self, system, location):
+        firing_arc = system.get_parameter('firing-arc')
+        if firing_arc is None or firing_arc.contains(location):
+            return abs(location) in self._damage_lookup
+        return False
+
+    def get_damage(self, system, distance, choice):
+        return ResourcePool(self._damage_type, choice(self._damage_lookup[location]))

@@ -1,0 +1,61 @@
+* announce-initial-speed / shuttle-determine-initial-speed
+[queued by player, mandatory]
+  unit - Unit
+  speed-plot - SpeedPlot
+queues all move commands, and all announce-speed-change commands
+posts a message
+
+* move
+[queued by shuttle-determine-initial-speed, terrain, etc.]
+  unit - Unit
+  bearing - Bearing
+posts a message
+
+* announce-speed-changes
+[queued by speed-plot]
+  unit - Unit
+posts a message
+
+* emergency-deceleration
+[queued by announce-emergency-deceleration]
+  unit - Unit
+updates speed-plot, cancels move and announce-speed-change-commands
+posts a message
+
+* announce-emergency-deceleration
+[queued by player]
+  unit - Unit
+queues emergency-deceleration command
+posts a message
+
+* decide-direct-fire
+[queued by player, can be cancelled, multiples can be queued]
+  unit - Unit
+  weapon - System
+  target - Unit
+queues announce-direct-fire and resolve-other-weapons commands
+posts a message
+
+* announce-direct-fire
+[queued by decide-direct-fire]
+  unit - Unit
+  weapon - System
+  target - Unit
+posts a message
+
+* resolve-other-weapons
+[queued by decide-direct-fire]
+  unit - Unit
+  weapon - System
+  target - Unit
+queues an allocate-damage command
+posts a message
+
+*allocate-damage
+[queued by resolve-other-weapons]
+  target - Unit
+  from - Location
+  damage_type - ResourceType
+  amount - integer
+updates damage state of systems
+posts a message

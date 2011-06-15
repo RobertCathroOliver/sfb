@@ -1,0 +1,26 @@
+EnergyConsumer service
+- an interface for energy allocation
+- indicates how much energy this system consumes and which types
+- indicates how it interacts with reserve power
+
+FrequencyRestriction service
+- indicates how often the system can be used
+- impulses-between-uses
+- uses-per-turn
+- previous-use
+- later of now + 8 impulse or next turn 1st impulse
+- how to use this with phaser-Gs?
+
+EnergyAllocation unit service
+- determines how much energy systems produce
+- determines which system can consume energy
+- apportions energy to systems that need it
+- sets up speed plot
+
+PhaserCapacitor system
+- functions as a ResourcePool for phaser firing
+- 
+
+WeaponTarget for units
+- indicates which weapons it can be targeted by
+

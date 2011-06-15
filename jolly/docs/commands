@@ -1,0 +1,19 @@
+Commands
+
+Commands have the following properties:
+1. A time
+2. An argument list
+3. Management rules
+4. Execution rules
+
+1. Time
+Commands can only occur at a particular phase in the sequence of play.  The time for a command indicates on what turn and impulse the command is queued to execute.
+
+2. Arguments
+Command arguments specify the details of command execution.  Arguments may be mandatory or not.  They may be required when the command is queued, or not.  They must have a particular type - either an entity or a value object.
+
+3. Management Rules
+These rules dictate when a command can be queued, when it can be cancelled and when it can be changed.  Commands cannot be cancelled or changed after they are executed.  They cannot be queued after the current time.
+
+4. Execution Rules
+These rules determine the effect of the command.  They use the game context and the parameters to create a new game state to represent the world post-command execution.
