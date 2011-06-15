@@ -1,0 +1,21 @@
+new storage/retrieval solution
+ - less complex
+ - less repetition
+ - transactions
+ - safe for multiple users
+
+json schema for commands
+ - automatically generated from command templates
+
+standardized error handling for commands
+
+front end
+- ssd display
+- command builder
+- sequence of play display
+- speed plotting
+- energy allocation
+
+energy allocation
+ - energy producer / consumer model
+ - reserve power
