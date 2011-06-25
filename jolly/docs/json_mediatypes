@@ -57,8 +57,8 @@
 {"id" : "1",
  "unit" : {"href" : "/unit/1"},
  "prototype" : {"href" : "/prototype/ph-1"},
- "properties" : {"firing-arc" : "FA",
-                 "damage-arc" : "FA",
+ "properties" : {"firing-arc" : {"href" : "/firing-arc/FA" },
+                 "damage-arc" : {"href" : "/firing-arc/FA" },
                  "damage-status" : "undamaged",
                  "previous-uses" : ["1.1.direct-fire-stage"]}
 }

@@ -7,7 +7,15 @@ To save:
 To restore:
  retrieve the obj as primitives based on id
  convert the retrieved document to an object
+
+database objects:
+users
+games
+command queues
+
 """
+
+
 
 class Db(object):
 
@@ -33,6 +41,9 @@ class Db(object):
 
     def get_doc_id(self, obj):
         return self.doc_id_cache.get(id(obj), self.gen_doc_id())
+
+    def gen_doc_id():
+        pass
 
     def deconstruct(self, obj):
         pass

@@ -7,6 +7,31 @@
  }
 }
 
+def json_schema(template):
+    result = {'id': template.name,
+              'title': '{1} command'.format(template.name),
+              'extends': { '$ref': 'command-template' },
+              'time': { 'pattern': '^[1-9][0-9]*\.([1-9]|[1-2][0-9]|3[0-2])\.'.format(template.step) },
+              'arguments' : {} }
+    args = {}
+    for arg in template.arguments:
+        args[arg.name] = json_schema(formal_argument)
+    result['arguments']['properties'] = args
+    return result
+
+def json_schema(arg):
+    result = {'required': arg.mandatory}
+    links = []
+    if is_ref(arg):
+        result['type'] = get_uri(arg.klass)
+        links.append({'rel': arg.name,
+                      'href': '\{arguments/{1}\}'.format(arg.name)})
+    else:
+        result['type'] = json_schema(type)
+   
+def json_schema(type):
+    result = { 
+
 FormalArgument to JSON Schema
 
 name -> property name

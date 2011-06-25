@@ -1,0 +1,105 @@
+{
+  "owner" : "player/12341234123412341234123412341234",
+  "template" : "command-templates/move",
+  "time" : "1.2.move",
+  "arguments" : {
+    "unit" : "unit/12341234123412341234123412341234",
+    "bearing" : "straight"
+  }
+}
+
+{
+  "id" : "command-template",
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string",
+      "description" : "Unique identifier of command",
+      "required" : false,
+      "pattern" : "[0-9a-f]{32}"
+    },
+    "owner" : {
+      "type" : "string",
+      "description" : "The issuer of the command",
+      "required" : true,
+      "format" : "uri"
+    },
+    "template" : {
+      "type" : "string",
+      "description" : "The template for this command",
+      "required" : true,
+      "format" : "uri"
+    },
+    "time" : {
+      "type" : "string",
+      "descripton" : "The scheduled moment of execution",
+      "required" : true,
+      "format" : "sfb-moment"
+    },
+    "arguments" : {
+      "type" : "object",
+      "description" : "The arguments specifying the command behaviour",
+      "required" : true
+    }
+  },
+  "links" : [
+    {
+      "rel" : "self",
+      "href" : "command/{id}"
+    },
+    {
+      "rel" : "create",
+      "method" : "POST",
+      "href" : "{owner}/queue"
+      "schema" : {
+        "$ref" : "#"
+      }
+    },
+    {
+      "rel" : "owner",
+      "href" : "{owner}"
+    },
+    {
+      "rel" : "template",
+      "href" : "{template}"
+    }
+}
+
+{
+  "id" : "move",
+  "title" : "move-command",
+  "description" : "A move command",
+  "extends" : {
+    "$ref" : "command-template"
+  },
+  "properties" : {
+    "template" : {
+      "pattern" : "command-templates/move"
+    },
+    "time" : {
+      "pattern" : "[1-9][0-9]*\.([1-9]|[12][0-9]|3[0-2]\.move"
+    },
+    "arguments" : {
+      "properties" : {
+        "unit" : {
+          "type" : "string",
+          "description" : "The unit moving",
+          "required" : true,
+          "format" : "uri"
+        },
+        "bearing" : {
+          "type" : "string",
+          "description" : "The direction of movement",
+          "required" : true,
+          "enum" : ["turn-port", "turn-starboard", "slip-port", "slip-starboard", "straight"]
+        }
+      }
+    }
+  },
+  "links" : [
+    {
+      "rel" : "unit",
+      "href" : "{arguments/unit}"
+    }
+}
+
