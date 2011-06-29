@@ -1,3 +1,5 @@
+import json
+
 def json_encode(obj):
     for klass in type(obj).__mro__:
         encoder = json_encoders.get(klass.__name__)
@@ -5,7 +7,16 @@ def json_encode(obj):
             return encoder(obj)
     raise TypeError('{0} is not JSON serializable'.format(repr(obj)))
 
+def get_id(obj):
+    return 'id'
+
 json_encoders = {
+    'NoneType' : (lambda x: None),
+    'int' : int,
+    'str' : unicode,
+    'unicode' : unicode,
+    'list' : (lambda lst: [json_encode(l) for l in lst]),
+    'dict' : (lambda dct: dict((k, json_encode(v)) for k, v in dct.items())),
     'Game' : (lambda game: {'type': 'game',
                             '_id': get_id(game),
                             'title': game.title,
@@ -28,7 +39,7 @@ json_encoders = {
     'AccelerationLimit' : (lambda limit: {'maximum-speed': limit.max_speed,
                                           'maximum-addition': limit.max_addition,
                                           'maximum-multiplication': limit.max_multiple}),
-    'TurnMode' : unicode,
+    'TurnMode' : (lambda turnmode: turnmode.name),
     'Duration' : (lambda duration: {'turns': 'turns', 'impulses': duration.impulses}),
     'RangeDict' : (lambda rdict: [[r.begin, r.end, v] for r, v in rdict.ranges.items()])
 }
