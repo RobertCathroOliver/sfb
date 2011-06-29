@@ -11,6 +11,6 @@ admin_shuttle = Prototype('admin-shuttle',
                                'acceleration-limit' : AccelerationLimit(6, 3, 1),
                                'damage-rules' : DAC_shuttle},
                               [System(i+1, registry.get('shuttle-hull')) for i in range(6)] +
-                              [System(7, registry.get('shuttle-phaser-1'),
+                              [System(7, registry.get('shuttle-phaser-3'),
                                       {'firing-arc' : firing_arc.ALL})])
                                

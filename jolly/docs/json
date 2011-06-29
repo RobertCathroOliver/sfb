@@ -1,0 +1,195 @@
+Game:
+The "_id" field is the database key and the "_rev" field is the database revision of the record.
+The "id" field is the designation for the logical game that is used in every other context, and the "rev" field
+is the number of revisions of that game.  On update, if the game has changed, a new database record is created 
+with an incremented "rev" field.  Other records remain in the database as historical snapshots of the game in
+progress.
+An update validation function ensures that the next "rev" is unused.  If the next "rev" has been used, the Game
+document is refetched and the modifications are performed on the updated document.
+
+
+Instead, store:
+{ "_id" : "aslkdfj",
+  "_rev" : "asdfasdf",
+  "type" : "game",
+  "history" : [],
+  ... same
+}
+on update, append the new doc to history and overwrite the other fields.
+Don't return history unless explicitly requested.
+Don't need "rev" or "id".
+
+Or, store:
+{ "_id" : "asdfaskld",
+  "_rev" : "lkaksdjf"<
+  "type" : "game",
+  "initial" : { game json }
+  "deltas" : []
+  ... same
+}
+on update, append the new delta to history and overwrite the other fields.
+Don't return initial or deltas unless explicity requested.
+Don't need "rev" or "id".
+
+History records can be json-patch records of the document.
+I like this best.
+
+Need Game to json encoder
+json_encoders = {
+    Game : (lambda game: {'type': 'game', 
+                          '_id': get_id(game), 
+                          'title': game.title, 
+                          'players': json_encode(game.players) }),
+    Player : (lambda player: {'type': 'player',
+                              'id': get_id(player),
+                              'name': player.name,
+                              'units': json_encode(player.units) }),
+    System : (lambda system: {'id': system.id,
+                              'prototype': system.prototype.name,
+                              'properties': json_encode(system.properties),
+                              'subsystems': json_encode(system.subsystems) })
+}
+
+def json_encode(obj):
+    try:
+        json_encoders[type(obj)](obj)
+    except KeyError:
+        raise TypeError('{0} is not JSON serializable'.format(repr(obj)))
+
+{ "_id" : "1234123abcdef125bdf2342",
+  "_rev" : "1-23434023809850823094",
+  "type" : "game",
+  "id" : "413251345134",
+  "rev" : 3,
+  "title" : "Federation vs. Klingon Duel",
+  "players" : [
+    { "type" : "player",
+      "id" : "aaksw23afsdfas",
+      "name" : "Klingon",
+      "units" : [
+        { "id" : "1234567890",
+          "name" : "Admin Shuttle #1",
+          "prototype" : "admin-shuttle",
+          "properties" : {
+            "position" : "1012A",
+            "speed-plot" : [
+              { "speed" : 6,
+                "until" : 32
+              }
+            ],
+            "previous-speed-plot" : [
+              { "speed" : 6,
+                "until" : 32
+              }
+            ],
+            "turn-mode" : "shuttle",
+            "turn-mode-counter" : 1,
+            "sideslip-mode-counter" : 1,
+            "acceleration-limit" : {
+              "maximum-speed" : 6,
+              "maximum-addition" : 6,
+              "maximum-multiplication" : 2
+            },
+            "damage-rules" : "shuttle"
+          },
+         
+          "subsystems" : [
+            { "id" : "123123123",
+              "prototype" : "phaser-3",
+              "properties" : {
+                "firing-arc" : "360",
+                "time-between-use" : {
+                  "turns" : 0,
+                  "impulses" : 8
+                },
+                "uses-per-turn" : 1,
+                "previous-uses" : [
+                  "1.6.resolve-other-weapons"
+                ]
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            },
+            { "id" : "23423423",
+              "prototype" : "shuttle-hull",
+              "properties" : {
+                "damage-status" : "undamaged"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+{ "_id" : "234234234234245234",
+  "_rev" : "2-2312312312313",
+  "type" : "command",
+  "game" : "413251345134",
+  "owner" : "aaksw23afsdfas",
+  "template" : "move",
+  "time" : "1.18.move",
+  "status" : "queued",
+  "arguments" : {
+    "unit" : "1234567890",
+    "bearing" : "straight"
+  }
+}
+
+{ "_id" : "234234234234234234",
+  "_rev" : "2-34234234252352352",
+  "type" : "user",
+  "name" : "bubbaganoush",
+  "email" : "bubbaganoush@example.com",
+  "password" : "asdfasldkjfa",
+  "players" : [
+    "aaksw23afsdfas"
+  ]
+}
+
+{ "_id" : "0234uoajdsfj",
+  "_rev" : "1-aslkdjfaklsdjflkasdf",
+  "type" : "action",
+  "action-type" : "property-change",
+  "game" : "413251345134",
+  "owner" : "aaksw23afsdfas",
+  "command" : "234234234234245234",
+  "private" : false
+}
+
+{ "_id" : "02342342234lk2jlkj",
+  "_rev" : "1-asdklfjalkdfjgla",
+  "owner" : "aaksw23afsdfas",
+  "action-type" : "advance",
+  "time" : "1.25.move",
+  "status" : "active"
+}
