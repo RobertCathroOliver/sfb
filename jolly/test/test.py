@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '/Users/robert/jolly')
+sys.path.insert(0, '/home/robert/projects/jolly/src/jolly')
 
 # setup
 import jolly.map
@@ -32,3 +32,4 @@ game = jolly.core.Game(sfb.chrono.SOP, map, [player1, player2], sfb.util.choice)
 
 cmd = jolly.command.Command(None, commands['turn-setup'], sfb.chrono.SOP.get_moment('turn-setup'), {'game' : game})
 game.insert_into_queue(cmd)
+
