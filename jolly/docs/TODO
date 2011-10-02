@@ -1,3 +1,6 @@
+install python couchdb package
+install python mimetypes package
+
 new storage/retrieval solution
  - less complex
  - less repetition
@@ -10,6 +13,7 @@ json schema for commands
 standardized error handling for commands
 
 front end
+- run on separate web server/port
 - ssd display
 - command builder
 - sequence of play display
