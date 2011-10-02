@@ -10,13 +10,12 @@ from jolly.command import (CommandQueue, NotQueued, PreviouslyExecuted,
 class Player(object):
     """A Player in the Game."""
 
-    def __init__(self, name, units):
+    def __init__(self, name, units=None, breakpoints=None, status=None, queue=None):
         self.name = name
         self.units = units or []
-        self.breakpoints = [BreakPoint(self, 'start-game')]
-        self.log = ActionLog(self)
-        self.status = Status(self)
-        self.queue = CommandQueue()
+        self.breakpoints = breakpoints or [BreakPoint(self, 'start-game')]
+        self.status = status or Status(self)
+        self.queue = queue or CommandQueue()
         self.queue.owner = self
         self.owner = None
         self.game = None
@@ -55,7 +54,7 @@ class User(object):
 class Game(object):
     """The main object representing the state of the game."""
 
-    def __init__(self, title, sequence_of_play, map_, players, choice):
+    def __init__(self, title, sequence_of_play, map_, players, choice, log=None, queue=None):
         self.title = title
         self.sequence_of_play = sequence_of_play
         self.map = map_
@@ -63,8 +62,8 @@ class Game(object):
         self.players = players
         for p in self.players:
             p.game = self
-        self.log = ActionLog(self)
-        self.game_queue = CommandQueue()
+        self.log = log or ActionLog(self)
+        self.game_queue = queue or CommandQueue()
         self.game_queue.owner = self
         self.choice = choice
         self.last_command = None
