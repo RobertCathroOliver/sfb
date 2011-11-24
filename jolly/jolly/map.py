@@ -163,15 +163,16 @@ def make_path(start, end, bias):
     """Create a path from location start to location end."""
     return make_route(start, end, bias).root(start)
 
-class OutOfBoundsError(Exception): pass
-class DuplicateItemError(Exception): pass
 
-class Token(object):
-    """An item on a map.  Used only by Map objects."""
+class MapBound(object):
+    """Minimum and maximum location coordinates in a given dimension."""
 
-    def __init__(self, item, position):
-        self.item = item
-        self.position = position
+    def __init__(self, maximum, minimum=0):
+        self.minimum = minimum
+        self.maximum = maximum
+
+    def __contains__(self, point):
+        return self.minimum <= point < maximum
 
 
 class Map(object):
@@ -179,32 +180,12 @@ class Map(object):
    
     def __init__(self, bounds):
         self.bounds = bounds
-	self.inbounds = [lambda *c: all(0 <= a < b for a, b in zip(c, bounds))]
-        self.tokens = []
         self.game = None
 
     def __contains__(self, location):
         """Determine whether location is within map bounds."""
-        return location in LocationMask('map', self.inbounds)
-
-    def has_item(self, item):
-	"""Return if the token is on the map."""
-	return item in [t.item for t in self.tokens]
-
-    def add(self, item, position):
-	"""Add the item to the map at position, if possible."""
-	if not position in self:
-            raise OutOfBoundsError("item is out of bounds")
-	if self.has_item(item):
-            raise DuplicateItemError("item is already on map")
-	self.tokens.append(Token(item, position))
-
-    def remove(self, item):
-	"""Remove the item from the map."""
-	for i, token in enumerate(self.tokens):
-	    if token.item == item:
-	        del self.tokens[i]
-		break
+        self.inbounds = self.inbounds or LocationMask('map', [lambda *c: all(a in b for a, b in zip(c, bounds))])
+        return location in self.inbounds
 
     def __repr__(self):
         return u'Map({0})'.format(self.bounds) 

@@ -2,10 +2,13 @@
 SQL Alchemy mapping.
 """
 
+import numbers
 from sqlalchemy import Table, MetaData, Column, ForeignKey, Boolean, Integer, String
 from sqlalchemy.orm import mapper, relationship
+from sqlalchemy.ext.orderinglist import ordering_list
+
 from jolly.core import User
-from jolly.map import Map
+from jolly.map import Map, MapBound
 
 metadata = MetaData()
 
@@ -66,8 +69,17 @@ map_table = Table('maps', metadata,
 
 map_bound_table = Table('map_bounds', metadata,
                  Column('map_bound_id', Integer, primary_key=True),
+                 Column('map_id', Integer, ForeignKey('maps.map_id')),
                  Column('dimension', Integer),
+                 Column('minimum', Integer),
                  Column('maximum', Integer))
+
+mapper(Map, map_table, properties={
+    'bounds': relationship(MapBound,
+                           collection_class=ordering_list('dimension'), 
+                           order_by=[map_bound_table.c.dimension])
+})
+mapper(MapBound, map_bound_table);
 
 system_table = Table('systems', metadata,
               Column('system_id', Integer, primary_key=True),
