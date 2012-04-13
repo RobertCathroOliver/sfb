@@ -10,16 +10,19 @@ from jolly.command import (CommandQueue, NotQueued, PreviouslyExecuted,
 class Player(object):
     """A Player in the Game."""
 
-    def __init__(self, name, units=None, breakpoints=None, status=None, queue=None):
+    def __init__(self, name, units=None, breakpoints=None, status=None, queue=None, owner=None):
         self.name = name
         self.units = units or []
         self.breakpoints = breakpoints or [BreakPoint(self, 'start-game')]
+        for b in self.breakpoints:
+            b.owner = self
         self.status = status or Status(self)
+        self.status.owner = self
         self.queue = queue or CommandQueue()
         self.queue.owner = self
-        self.owner = None
+        self.owner = owner
         self.game = None
-        for u in units:
+        for u in self.units:
             u.owner = self
 
     def check_breakpoints(self, action):
@@ -151,16 +154,17 @@ class Game(object):
     def log_actions(self, actions):
         for a in actions:
             self.log.add(a)
-            for p in self.players:
-                p.log.add(a)
 
 
 class ActionLog(object):
     """A list of actions that are visible by a given owner."""
 
-    def __init__(self, owner=None):
+    def __init__(self, owner=None, actions=None):
         self.owner = owner
         self.actions = []
+        if not actions is None:
+            for a in actions:
+                self.add(a)
 
     def add(self, action):
         if not getattr(action, 'private', False) or self.owner and self.owner == action.owner:

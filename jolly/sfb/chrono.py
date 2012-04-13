@@ -30,6 +30,10 @@ class Duration(object):
         self.turns_only = impulses is None
         self.impulses = turns * IMPULSES_PER_TURN + (impulses or 0)
 
+    @property
+    def turns(self):
+        return self.impulses // IMPULSES_PER_TURN
+
     def __add__(self, other):
         if not isinstance(other, Duration): return NotImplemented
         if self.turns_only != other.turns_only:

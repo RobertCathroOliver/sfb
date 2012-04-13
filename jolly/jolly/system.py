@@ -42,7 +42,7 @@ class System(object):
     def filter(self, predicate, include_self=False):
         """Return a list of all systems such that predicate(system) is true."""
         return [s for s in self.subsystems + 
-                           ([self] if include_unit else []) 
+                           ([self] if include_self else []) 
                   if predicate(s)]
 
     @property

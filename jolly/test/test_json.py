@@ -8,6 +8,7 @@ import sfb.movement
 
 import setup
 
+value_resolver = import_object(settings.VALUE_RESOLVER)
 registry = import_object(settings.REGISTRY)
 sequence_of_play = import_object(settings.SEQUENCE_OF_PLAY)
 choice = import_object(settings.RANDOMIZER)
@@ -17,7 +18,6 @@ s = registry.get('admin-shuttle').create_system('shuttle1', {'speed-plot': sfb.m
 p = jolly.core.Player('player1', [s])
 p.owner = u
 m = jolly.map.Map([42, 30])
-m.add(s, s.properties['position'])
 g = jolly.core.Game('Test Game', sequence_of_play, m, [p], choice)
 
 import sfb.command
@@ -37,4 +37,9 @@ bp2 = jolly.breakpoint.SequenceOfPlayBreakPoint(p, sfb.chrono.get_moment(1, 10, 
 p.breakpoints.append(bp2)
 
 g.advance()
+
+import jolly.couch
+import sfb.json_encode
+
+db = jolly.couch.Database(settings)
 

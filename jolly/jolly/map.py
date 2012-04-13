@@ -180,11 +180,11 @@ class Map(object):
    
     def __init__(self, bounds):
         self.bounds = bounds
+        self.inbounds = LocationMask('map', [lambda *c: all(a in b for a, b in zip(c, bounds))])
         self.game = None
 
     def __contains__(self, location):
         """Determine whether location is within map bounds."""
-        self.inbounds = self.inbounds or LocationMask('map', [lambda *c: all(a in b for a, b in zip(c, bounds))])
         return location in self.inbounds
 
     def __repr__(self):

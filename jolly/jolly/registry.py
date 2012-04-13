@@ -20,3 +20,4 @@ class Registry(object):
 	items = self.lookup[key]
 	if len(items) == 1:
 	    return list(items)[0]
+        raise KeyError(key)

@@ -7,6 +7,8 @@ DATABASE = {
     'SERIALIZER': 'jolly.db.serializer',
     'DESERIALIZER': 'jolly.db.deserializer',
     'POST_PROCESS': 'jolly.db.update_serializer',
+    'ENCODERS': 'sfb.json_encode.get_db_encoders',
+    'DECODERS': 'sfb.json_encode.get_db_decoders'
 }
 
 QUERY_VIEWS = {

@@ -12,12 +12,12 @@ from jolly.util import import_object, URLResolver
 def root(request):
     urlresolver = import_object(settings.URL_RESOLVER)
     result = {'games': {'href': urlresolver.get_query_url_by_name('games')},
-              'users': {'href':urlresolver.get_query_url_by_name('users')}}
+              'users': {'href': urlresolver.get_query_url_by_name('users')}}
     return result
 
 @jolly.http.authenticate
 @jolly.http.content_negotiate
-def get(request, doc_id, *args, **kwargs):
+def get(request, game_id, *args, **kwargs):
     db = jolly.db.create_database()
     try:
         obj = db.restore_object(doc_id)

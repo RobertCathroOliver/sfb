@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.urlresolvers import get_resolver
 
-import jolly.db
+import jolly.couch
 import jolly.util
 import jolly.map
 import fractions
@@ -14,9 +14,10 @@ from random import Random
 __all__ = ['choice', 'identifier', 'urlresolver', 'out', 'value_resolver']
 
 choice = Random().choice
-identifier = jolly.util.Identifier()
+identifier = jolly.util.Identifier(['Game', 'Player', 'User', 'System', 'BreakPoint', 'Command'])
 urlresolver = jolly.util.URLResolver(settings.ROOT_URLCONF, identifier)
 out = jolly.convert.output_converter(urlresolver)
+db = jolly.couch.Database(settings)
 
 def _lookup_reference(url):
     resolver = get_resolver(settings.ROOT_URLCONF)

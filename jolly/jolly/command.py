@@ -273,9 +273,11 @@ class Command(object):
 class CommandQueue(object):
     """A priority queue of command objects."""
 
-    def __init__(self):
-        self.commands = []
-	self.owner = None
+    def __init__(self, commands=None, owner=None):
+        self.commands = commands or []
+        for c in self.commands:
+            c.owner = self
+	self.owner = owner
 
     def __call__(self, command):
         heappush(self.commands, command)
