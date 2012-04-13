@@ -53,24 +53,37 @@ def get_api_encoders(settings, api_property_encoders):
     
     api_encoders = {
         'Game' : (lambda game: {'title': game.title,
-                                'map': {'href': get_uri('map', game_id=get_id(game))},
+                                'map': {'href': get_uri('map', root_id=get_id(game))},
                                 'players': [encode(p, api_property_encoders) for p in game.players],
                                 'time': encode(game.current_time, api_property_encoders),
-                                'log': {'href': get_uri('game-log', game_id=get_id(game))}}),
+                                'log': {'href': get_uri('game-log', root_id=get_id(game))}}),
         'Player' : (lambda player: {'name': player.name,
                                     'game': encode(player.game, api_property_encoders),
                                     'user': encode(player.owner, api_property_encoders),
                                     'units': [encode(u, api_property_encoders, 'Unit') for u in player.units],
-                                    'log': {'href': get_uri('log', player_id=get_id(player), game_id=get_id(player.game))},
-                                    'status': {'href': get_uri('status', player_id=get_id(player), game_id=get_id(player.game))},
-                                    'queue': {'href': get_uri('command-queue',  player_id=get_id(player), game_id=get_id(player.game))} }),
-        'System' : (lambda system: {'id': system.id,
+                                    'log': {'href': get_uri('log', doc_id=get_id(player), root_id=get_id(player.game))},
+                                    'status': {'href': get_uri('status', doc_id=get_id(player), root_id=get_id(player.game))},
+                                    'queue': {'href': get_uri('command-queue',  doc_id=get_id(player), root_id=get_id(player.game))} }),
+        'System' : (lambda system: {'id': unicode(system.id),
                                     'prototype': {'href': get_uri('system-prototype', name=system.prototype.name) },
                                     'properties': dict((k, encode(v, api_property_encoders)) for k, v in system.properties.items()),
                                     'subsystems': [encode(s, api_property_encoders) for s in system.subsystems] }),
         'User' : (lambda user: {'name': user.name,
                                 'email': user.email}),
-                              
+        'Map' : (lambda _map: {'width': int(_map.bounds[0]),
+                               'height': int(_map.bounds[1])}),
+        'Status' : (lambda status: {'status': status.status,
+                                    'details': encode(status.details, api_property_encoders)}),
+        'ActionLog' : (lambda log: {'owner': encode(log.owner, api_property_encoders),
+                                    'actions': encode(log.actions, api_property_encoders)}),
+        'CommandQueue': (lambda queue: {'owner': encode(queue.owner, api_property_encoders),
+                                        'commands': encode(queue.commands, api_property_encoders)}),
+        'Command': (lambda command: {'owner': encode(command.owner, api_property_encoders),
+                                     'template': encode(command.template, api_property_encoders),
+                                     'time': encode(command.time, api_property_encoders),
+                                     'status': command.status,
+                                     'arguments': encode(command.arguments, api_property_encoders)}),
+                                     
     }
     api_encoders.update(core_encoders)
     api_encoders['list'] = (lambda lst: [encode(l, api_property_encoders) for l in lst])
@@ -84,20 +97,36 @@ def get_api_property_encoders(settings):
     get_id = identifier.get_obj_id
     get_uri = urlresolver.get_url
     
-    api_property_encoders = {
-        'Game' : (lambda game: {'title': game.title, 'href': get_uri('game', game_id=get_id(game))}),
-        'Player' : (lambda player: {'name': player.name, 'href': get_uri('player', player_id=get_id(player), game_id=get_id(player.game))}),
-        'System' : (lambda system: {'id': system.id, 'href': get_uri('system', system_id=get_id(system), unit_id=get_id(system.owner), game_id=get_id(system.owner.owner.game))}),
-        'Unit' : (lambda unit: {'id': unit.id, 'href': get_uri('unit', unit_id=get_id(unit), game_id=get_id(unit.owner.game))}),
-        'User': (lambda user: {'name': user.name, 'href': get_uri('user', user_id=get_id(user))}),
+    api_property_encoders = {}
+    api_property_encoders.update({
+        'Game' : (lambda game: {'title': game.title, 'href': get_uri('game', root_id=get_id(game))}),
+        'Player' : (lambda player: {'name': player.name, 'href': get_uri('player', doc_id=get_id(player), root_id=get_id(player.game))}),
+        'System' : (lambda system: encode(system, api_property_encoders, 'Unit') if system.is_unit() else {'id': unicode(system.id), 'href': get_uri('system', doc_id=get_id(system), unit_id=get_id(system.owner), root_id=get_id(system.owner.owner.game))}),
+        'Unit' : (lambda unit: {'id': unicode(unit.id), 'href': get_uri('unit', doc_id=get_id(unit), root_id=get_id(unit.owner.game))}),
+        'User': (lambda user: {'name': user.name, 'href': get_uri('user', root_id=get_id(user))}),
+        'Command': (lambda command: {'href': get_uri('command', doc_id=get_id(command), player_id=get_id(command.owner), root_id=get_id(command.owner.game)),
+                                     'time': encode(command.time, api_property_encoders),
+                                     'template': encode(command.template, api_property_encoders)}),
+        'Action': (lambda action: {'action-type': action.action_type,
+                                   'time': encode(action.time, api_property_encoders),
+                                   'target': encode(action.target, api_property_encoders),
+                                   'description': encode(action.description, api_property_encoders),
+                                   'details': encode(action.details, api_property_encoders),
+                                   'owner': encode(action.owner, api_property_encoders)}),
+        'CommandTemplate' : (lambda template: {'name': template.name,
+                                               'href': get_uri('command-template', name=template.name)}),
+                                           
+        'Fraction' : (lambda f: int(f) if f.denominator == 1 else str(f)),
         'Position' : unicode,
         'Location' : unicode,
         'Direction' : unicode,
         'LocationMask' : unicode,
         'Moment' : unicode,
         'RangeDict' : (lambda rdict: [[r.begin, r.end, v] for r, v in rdict.ranges.items()]),
-    }
+    })
     api_property_encoders.update(core_encoders)
+    api_property_encoders['list'] = (lambda lst: [encode(l, api_property_encoders) for l in lst])
+    api_property_encoders['dict'] = (lambda dct: dict((k, encode(v, api_property_encoders)) for k, v in dct.items()))
     return api_property_encoders
 
 def get_db_encoders(settings):

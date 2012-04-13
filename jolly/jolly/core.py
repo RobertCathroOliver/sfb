@@ -28,6 +28,12 @@ class Player(object):
     def check_breakpoints(self, action):
         return [b for b in self.breakpoints if b.is_triggered(action)]
 
+    @property
+    def log(self):
+        if not self.game:
+            return None
+        return ActionLog(self, self.game.log.actions)
+
 class User(object):
     """The representation of a person using the system."""
 
@@ -167,7 +173,7 @@ class ActionLog(object):
                 self.add(a)
 
     def add(self, action):
-        if not getattr(action, 'private', False) or self.owner and self.owner == action.owner:
+        if not getattr(action, 'private', False) or not self.owner or self.owner and self.owner == action.owner:
             self.actions.append(action)
 
 

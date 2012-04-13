@@ -63,9 +63,6 @@ class URLResolver(object):
         self.identifier = identifier
         self.url_names = {}
 
-    def get_doc_id(self, obj):
-        return self.identifier.get_obj_id(obj)
-
     def get_url(self, url_name, **kwargs):
         return self.get_url_by_name(url_name, kwargs)
 

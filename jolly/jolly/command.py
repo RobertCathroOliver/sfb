@@ -206,6 +206,8 @@ class CommandTemplate(object):
 class Command(object):
     """A specification of the details of an action."""
 
+    private = True
+
     def __init__(self, owner, template, time, arguments):
         self.owner = owner
         self.template = template
@@ -273,10 +275,12 @@ class Command(object):
 class CommandQueue(object):
     """A priority queue of command objects."""
 
+    private = True
+
     def __init__(self, commands=None, owner=None):
         self.commands = commands or []
         for c in self.commands:
-            c.owner = self
+            c.queue = self
 	self.owner = owner
 
     def __call__(self, command):

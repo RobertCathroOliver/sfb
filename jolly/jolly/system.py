@@ -23,6 +23,9 @@ class System(object):
 	    s.owner = self
 	self.owner = None
 
+    def is_unit(self):
+        return not isinstance(self.owner, System)
+
     def has_service(self, service_name):
         """Determine whether this system has a given service."""
         return not self.prototype.get_service(service_name) is None

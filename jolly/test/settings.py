@@ -12,10 +12,8 @@ DATABASE = {
 }
 
 QUERY_VIEWS = {
-    'jolly.core.Player': 'query/players',
     'jolly.core.Game': 'query/games',
     'jolly.core.User': 'query/users',
-    'jolly.breakpoint.BreakPoint': 'query/breakpoints',
     'login': 'login/by_name',
 }
 
@@ -29,6 +27,7 @@ REGISTRY = 'sfb.registry'
 SEQUENCE_OF_PLAY = 'sfb.chrono.SOP'
 RANDOMIZER = 'sfb.config.choice'
 VALUE_RESOLVER = 'sfb.config.value_resolver'
+DB = 'sfb.config.db'
 
 ROOT_URLCONF = 'sfb.urls'
 
@@ -40,5 +39,5 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
 )
 TEMPLATE_DIRS = (
-    "C:/Users/rcathro-oliver/Documents/jolly/static",
+    "/home/robert/projects/jolly/src/jolly/static",
 )

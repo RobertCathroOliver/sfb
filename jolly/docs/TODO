@@ -1,11 +1,11 @@
-install python couchdb package
-install python mimetypes package
+*install python couchdb package
+*install python mimetypes package
 
-new storage/retrieval solution
- - less complex
- - less repetition
- - transactions
- - safe for multiple users
+*new storage/retrieval solution
+* - less complex
+* - less repetition
+* - transactions
+* - safe for multiple users
 
 json schema for commands
  - automatically generated from command templates

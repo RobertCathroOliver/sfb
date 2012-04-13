@@ -8,6 +8,7 @@ import fractions
 
 import sfb.map
 import sfb.chrono
+import sfb.json_encode
 
 from random import Random
 
@@ -16,8 +17,7 @@ __all__ = ['choice', 'identifier', 'urlresolver', 'out', 'value_resolver']
 choice = Random().choice
 identifier = jolly.util.Identifier(['Game', 'Player', 'User', 'System', 'BreakPoint', 'Command'])
 urlresolver = jolly.util.URLResolver(settings.ROOT_URLCONF, identifier)
-out = jolly.convert.output_converter(urlresolver)
-db = jolly.couch.Database(settings)
+out = sfb.json_encode.get_api_encoders(settings)
 
 def _lookup_reference(url):
     resolver = get_resolver(settings.ROOT_URLCONF)
@@ -74,3 +74,4 @@ _rules = ((r'^([-+]?[0-9]+(?:(?:/|.)[0-9]+)?)$', fractions.Fraction),
 
 value_resolver = jolly.util.ValueResolver(_rules)
 
+db = jolly.couch.Database(settings)

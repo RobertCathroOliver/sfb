@@ -7,11 +7,12 @@ def get_api_property_encoders(settings):
     api_property_encoders.update({
         'DamageAllocationChart' : (lambda dac: dac.name),
         'SpeedPlot' : (lambda speedplot: 'speedplot'),
-        'AccelerationLimit' : (lambda limit: {'maximum-speed': limit.max_speed,
-                                              'maximum-addition': limit.max_addition,
-                                              'maximum-multiplication': limit.max_multiple}),
+        'AccelerationLimit' : (lambda limit: {'maximum-speed': encode(limit.max_speed, api_property_encoders),
+                                              'maximum-addition': encode(limit.max_addition, api_property_encoders),
+                                              'maximum-multiplication': encode(limit.max_multiple, api_property_encoders)}),
         'TurnMode' : (lambda turnmode: turnmode.name),
-        'Duration' : (lambda duration: {'turns': 'turns', 'impulses': duration.impulses})
+        'Duration' : (lambda duration: {'turns': encode(duration.turns, api_property_encoders),
+                                        'impulses': encode(duration.impulses, api_property_encoders)})
     })
     return api_property_encoders
 

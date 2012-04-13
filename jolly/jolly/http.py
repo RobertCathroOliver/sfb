@@ -1,12 +1,14 @@
 """Utilities for dealing with HTTP responses using the Django framework."""
+import mimeparse
+import json
 
 from django.conf import settings
 from django.http import (HttpResponse, HttpResponseNotAllowed, 
                          HttpResponseRedirect, HttpResponseBadRequest,
                          HttpResponseNotFound, HttpResponseForbidden)
 from django.utils.importlib import import_module
-import mimeparse
-import json
+
+import jolly.util
 
 __all__ = ['HttpResponse', 'HttpResponseNotAllowed', 'HttpResponseUnauthorized',
            'HttpResponseRedirect', 'HttpResponseBadRequest', 
@@ -16,7 +18,6 @@ __all__ = ['HttpResponse', 'HttpResponseNotAllowed', 'HttpResponseUnauthorized',
 def authenticate(view):
     def wrapper(request, *args, **kwargs):
         import jolly.core
-        import jolly.db
         request.user = jolly.core.User('anonymous', '', '')
 
         if 'HTTP_AUTHORIZATION' in request.META:
@@ -24,8 +25,8 @@ def authenticate(view):
             auth_method, auth = authentication.split(' ', 1)
             if 'basic' == auth_method.lower():
                 username, password = auth.strip().decode('base64').split(':', 1)
-                db = jolly.db.create_database()
-                users = db.restore_collection(settings.QUERY_VIEWS['login'], username)
+                db = jolly.util.import_object(settings.DB)
+                users = db.restore_view(settings.QUERY_VIEWS['login'], username)
                 if len(users) == 1:
                     if users[0].authenticate(password):
                         request.user = users[0]

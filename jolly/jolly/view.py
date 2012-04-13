@@ -2,9 +2,8 @@ from django.conf import settings
 
 import json
 
-import jolly.db
 import jolly.http
-import jolly.convert
+import jolly.json_encode
 from jolly.util import import_object, URLResolver
 
 
@@ -17,33 +16,62 @@ def root(request):
 
 @jolly.http.authenticate
 @jolly.http.content_negotiate
-def get(request, game_id, *args, **kwargs):
-    db = jolly.db.create_database()
+def get(request, root_id, *args, **kwargs):
+    db = import_object(settings.DB)
     try:
-        obj = db.restore_object(doc_id)
+        root = db.restore(root_id)
+        doc_id = kwargs.get('doc_id', root_id)
         type_ = import_object(kwargs['doc_type'])
-    except (KeyError, ImportError):
-        return jolly.http.HttpResponseNotFound({'error': 'cannot restore'})
+        path = kwargs.get('path', ())
+        obj = db.get_obj(doc_id)
+        if obj is None:
+            return jolly.http.HttpResponseNotFound({'error': 'cannot restore 1'})
 
-    if not isinstance(obj, type_):
-        return jolly.http.HttpResponseNotFound({'error': 'bad type'})
+        def follow_path(obj):
+            for p in path:
+                obj = p(obj)
+                if obj is None:
+                    return obj
+            return obj
+        if isinstance(obj, list):
+            obj = [follow_path(o) for o in obj]
+            if any(o is None for o in obj):
+                return jolly.http.HttpResponseNotFound({'error': 'cannot restore 2'})
+        else:
+            obj = follow_path(obj)
+            if obj is None:
+                return jolly.http.HttpResponseNotFound({'error': 'cannot restore 2'})
+    except (KeyError, ImportError):
+        return jolly.http.HttpResponseNotFound({'error': 'cannot restore 3'})
+
+    if isinstance(obj, list):
+        if any(not isinstance(o, type_) for o in obj):
+            return jolly.http.HttpResponseNotFound({'error': 'bad type'})
+    else:
+        if not isinstance(obj, type_):
+            return jolly.http.HttpResponseNotFound({'error': 'bad type'})
 
     user = request.user
-    if kwargs.get('private_view', False) and not user.is_owner(obj):
-        return jolly.http.HttpResponseUnauthorized(settings.AUTHENTICATION_REALM)
+    if kwargs.get('private_view', False):
+        if isinstance(obj, list):
+            if any(not user.is_owner(o) for o in obj):
+                return jolly.http.HttpResponseUnauthorized(settings.AUTHENTICATION_REALM)
+        else:
+            if not user.is_owner(obj):
+                return jolly.http.HttpResponseUnauthorized(settings.AUTHENTICATION_REALM)
 
     def is_visible(obj):
         return not getattr(obj, 'private', False) or user.is_owner(obj)
 
     out = import_object(settings.OUTPUT_CONVERTER)
-    result = out.convert(obj, is_visible)
+    result = jolly.json_encode.encode(obj, out)
 
     return result
 
 @jolly.http.authenticate
 @jolly.http.content_negotiate
 def get_many(request, *args, **kwargs):
-    db = jolly.db.create_database()
+    db = import_object(settings.DB)
     query = kwargs.get('query', [])
     where = []
     for k in query:
@@ -51,7 +79,7 @@ def get_many(request, *args, **kwargs):
             where.extend([k, request.GET[k]])
     try:
 	view_name = settings.QUERY_VIEWS[kwargs['doc_type']]
-        obj = db.restore_collection(view_name, where)
+        objs = db.restore_view(view_name, where)
     except (KeyError, ImportError):
         return jolly.http.HttpResponseNotFound({'error': 'not found'})
 
@@ -63,7 +91,7 @@ def get_many(request, *args, **kwargs):
         return not getattr(obj, 'private', False) or user.is_owner(obj)
 
     out = import_object(settings.OUTPUT_CONVERTER)
-    result = out.convert(obj, is_visible)
+    result = jolly.json_encode.encode(objs, out)
 
     return result
 

@@ -62,6 +62,24 @@ class Database(object):
             self.revs[doc_id] = doc['_rev']
             obj = self.decode(doc)
        return obj
+
+    def restore_view(self, name, filter=None):
+        """Restore a view from the database."""
+        if filter:
+            view_results = self.db.view(name, key=filter)
+        else:
+            view_results = self.db.view(name)
+
+        result = []
+        for row in view_results:
+            obj = self.get_obj(row.id)
+            if obj is None or row.id in self.dirty_objs:
+                 doc = dict(row.value)
+                 self.revs[row.id] = doc['_rev']
+                 obj = self.decode(doc)
+            result.append(obj)
+        return result
+            
     
     def decode(self, doc, references=None):
         """Convert a JSON document to Python object."""
