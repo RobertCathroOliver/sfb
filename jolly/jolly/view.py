@@ -97,6 +97,21 @@ def get_many(request, *args, **kwargs):
 
 @jolly.http.authenticate
 @jolly.http.content_negotiate
+def registry_get(request, name, doc_type, *args, **kwargs):
+    registry = import_object(settings.REGISTRY)
+    try:
+        obj = registry.get(name, doc_type)
+    except (KeyError,):
+        return jolly.http.HttpResponseNotFound({'error': 'not found'})
+
+    out = import_object(settings.OUTPUT_CONVERTER)
+    result = jolly.json_encode.encode(obj, out)
+
+    return result
+
+
+@jolly.http.authenticate
+@jolly.http.content_negotiate
 def delete_command(request, doc_id, *args, **kwargs):
     import jolly.command
 

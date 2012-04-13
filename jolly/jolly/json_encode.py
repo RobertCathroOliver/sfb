@@ -65,6 +65,7 @@ def get_api_encoders(settings, api_property_encoders):
                                     'status': {'href': get_uri('status', doc_id=get_id(player), root_id=get_id(player.game))},
                                     'queue': {'href': get_uri('command-queue',  doc_id=get_id(player), root_id=get_id(player.game))} }),
         'System' : (lambda system: {'id': unicode(system.id),
+                                    'owner': encode(system.owner, api_property_encoders),
                                     'prototype': {'href': get_uri('system-prototype', name=system.prototype.name) },
                                     'properties': dict((k, encode(v, api_property_encoders)) for k, v in system.properties.items()),
                                     'subsystems': [encode(s, api_property_encoders) for s in system.subsystems] }),
@@ -83,7 +84,26 @@ def get_api_encoders(settings, api_property_encoders):
                                      'time': encode(command.time, api_property_encoders),
                                      'status': command.status,
                                      'arguments': encode(command.arguments, api_property_encoders)}),
-                                     
+        'CommandTemplate': (lambda template: {'title': template.name,
+                                              'type': 'object',
+                                              'properties': {
+                                                  'template': {
+                                                      'type': 'string',
+                                                      'required': True,
+                                                      'format': 'uri',
+                                                      'enum': [get_uri('command-template', name=template.name)]
+                                                  },
+                                                  'time': {
+                                                      'type': 'string',
+                                                      'required': True,
+                                                      'format': 'moment[step={0}]'.format(template.step)
+                                                  },
+                                                  'arguments': {
+                                                      'type': 'object',
+                                                      'properties': dict((a.name, encode(a, api_property_encoders)) for a in template.arguments)
+                                                      }
+                                                  }
+                                              }),
     }
     api_encoders.update(core_encoders)
     api_encoders['list'] = (lambda lst: [encode(l, api_property_encoders) for l in lst])
@@ -97,6 +117,18 @@ def get_api_property_encoders(settings):
     get_id = identifier.get_obj_id
     get_uri = urlresolver.get_url
     
+    def encode_argument(arg):
+        import numbers
+        result = {'required': arg.mandatory}
+        if arg.klass.__name__ in identifier.resource_types:
+            result['type'] = 'string'
+            result['format'] = 'uri'
+        elif isinstance(arg.klass, numbers.Integral):
+            result['type'] = 'integer'
+        else:
+            result['type'] = 'string'
+        return result
+
     api_property_encoders = {}
     api_property_encoders.update({
         'Game' : (lambda game: {'title': game.title, 'href': get_uri('game', root_id=get_id(game))}),
@@ -115,7 +147,7 @@ def get_api_property_encoders(settings):
                                    'owner': encode(action.owner, api_property_encoders)}),
         'CommandTemplate' : (lambda template: {'name': template.name,
                                                'href': get_uri('command-template', name=template.name)}),
-                                           
+        'FormalArgument' : encode_argument,
         'Fraction' : (lambda f: int(f) if f.denominator == 1 else str(f)),
         'Position' : unicode,
         'Location' : unicode,

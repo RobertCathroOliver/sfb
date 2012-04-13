@@ -4,7 +4,7 @@ from django.conf.urls.defaults import patterns
 from django.views.generic.simple import direct_to_template
 
 from jolly.http import MethodDispatcher
-from jolly.view import (root, get, get_many, 
+from jolly.view import (root, get, get_many, registry_get,
 	                delete_command, put_command, post_command,
 			delete_breakpoint, post_breakpoint)
 
@@ -97,7 +97,7 @@ urlpatterns = patterns('',
          'template': ''},
 	'system-prototype'),
     (r'^command-template/(?P<name>[a-zA-Z-]+)$',
-        MethodDispatcher({'GET': direct_to_template}),
+        MethodDispatcher({'GET': registry_get}),
         {'doc_type': 'jolly.command.CommandTemplate',
          'template': ''},
 	'command-template'),
