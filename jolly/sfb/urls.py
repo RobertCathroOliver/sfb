@@ -116,6 +116,9 @@ urlpatterns = patterns('',
     (r'^map.js', 
         direct_to_template, 
         {'template': 'map.js'}),
+    (r'^sfb.js', 
+        direct_to_template, 
+        {'template': 'sfb.js'}),
 )
 
 

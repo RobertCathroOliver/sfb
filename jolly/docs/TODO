@@ -9,8 +9,8 @@
 
 privacy
 
-json schema for commands
- - automatically generated from command templates
+?*json schema for commands
+?* - automatically generated from command templates
 
 standardized error handling for commands
 
@@ -25,3 +25,8 @@ front end
 energy allocation
  - energy producer / consumer model
  - reserve power
+
+front end (in more detail)
+- communicating widgets e.g. map, ssd, sop, ea, speedplot
+- map widget
+
