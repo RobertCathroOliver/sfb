@@ -15,11 +15,21 @@ p2 = Position(Location(10, 10), Compass['A'])
 unit1 = admin_shuttle.create_system('unit-1', {'position' : p1 })
 unit2 = admin_shuttle.create_system('unit-2', {'position' : p2 })
 
+class System(object):
+    def __init__(self, id, prototype, properties=None, services=None, systems=None):
+        self._id = id
+        self._prototype = prototype
+        self._properties = properties || {}
+        self._services = services || []
+        self._systems = systems || []
+
 class Prototype(object):
-    def __init__(self, name):
+    def __init__(self, name, properties=None):
         self._name = name
+        self._properties = properties || {}
     def create_system(self, id, properties):
-        return {'id' : id, 'prototype' : self._name, 'properties' : properties }
+	properties = dict(self._properties).update(properties)
+	return System(id, self, properties)
 
 prototypes = {'shuttle-hull' : Prototype('shuttle-hull'),
               'shuttle-phaser-3' : Prototype('shuttle-phaser-3')}
