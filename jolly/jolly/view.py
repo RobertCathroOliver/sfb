@@ -10,7 +10,8 @@ from jolly.util import import_object, URLResolver
 @jolly.http.content_negotiate
 def root(request):
     urlresolver = import_object(settings.URL_RESOLVER)
-    result = {'games': {'type': 'collection', 'href': urlresolver.get_query_url_by_name('games')},
+    result = {'type': 'root',
+              'games': {'type': 'collection', 'href': urlresolver.get_query_url_by_name('games')},
               'users': {'type': 'collection', 'href': urlresolver.get_query_url_by_name('users')}}
     return result
 
