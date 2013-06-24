@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<!--	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+        <script type="text/javascript" src="../jquery.min.js"></script>   
 
 	<script type="text/javascript">
 	    function submit(url) {
@@ -9,12 +10,14 @@
 		var data = $('textarea[name="data"]').val()
 		var settings = 
 		   {//'accepts': 'application/json',
-		    'cache': false,
                     'contentType': 'application/json',
 		    'data': data,
 		    'dataType': 'json',
 		    'type':method,
-		    'url': 'http://127.0.0.1:8000/' + url,
+                    'xhrFields': {
+                        'withCredentials': true
+                    },
+		    'url': 'http://api.sfb.local/' + url,
 		    'success': function(data, textStatus, jqXHR) {
 			var re = /"href":"([^"]*)"/g;
 			var d = JSON.stringify(data).replace(re, '"href":"<a href="#" onclick="submit(\'$1\'); return false;">$1</a>"');
@@ -32,7 +35,7 @@
     </head>
     <body>
 	<form>
-	    URL: http://127.0.0.1:8000/<input id="url" type="text" name="url" /><br />
+	    URL: http://api.sfb.local/<input id="url" style="width:500px;" type="text" name="url" /><br />
 	    <input type="radio" name="method" value="GET" checked="checked" />GET<br />
 	    <input type="radio" name="method" value="PUT" />PUT<br />
 	    <input type="radio" name="method" value="POST" />POST<br />

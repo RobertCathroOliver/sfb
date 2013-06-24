@@ -1,33 +1,66 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <!-- <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css" type="text/css" rel="Stylesheet" />
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>       
-        <script type="text/javascript" src="http://127.0.0.1:8000/window.js"></script>
+ -->
+        <link href="http://static.sfb.local/jquery-ui-1.8.11.custom.css" type="text/css" rel="Stylesheet" />
+	<script type="text/javascript" src="../jquery.min.js"></script>       
+	<script type="text/javascript" src="../jquery-ui.js"></script>       
+	<script type="text/javascript" src="../sfb.js"></script>       
         <script type="text/javascript">
+var ssd;
             $(function() {
-                var text = "al;ksdjf;laksdjfl;kajsdf;lkajsdl;fkja;sldfkja;lskdjf;alsdkjf;laskdjf;laskdjf;alsdjkf;alskjdf;laksdjf;alskdjf;laskdjf;laskdjfl;askdfj;alskdjf;alksdjfal;skdjf;alskdjf";
-                var w1 = new SFB.Window('#window1', text, { width: 200, scrollable: true});
+             /*   var url = 'http://www.designofsignage.com/application/symbol/hospital/image/600x600/arrow-up.jpg';
+             var tokens = [{img_src: url, position: {x: 5, y: 4}, facing: 'A'},
+             {img_src: url, position: {x: 6, y: 4}, facing: 'B'},
+             {img_src: url, position: {x: 7, y: 4}, facing: 'C'},
+             {img_src: url, position: {x: 8, y: 4}, facing: 'D'},
+             {img_src: url, position: {x: 9, y: 4}, facing: 'E'},
+             {img_src: url, position: {x: 2, y: 7}, facing: 'F'}]
+                var map = new SFB.Map(10, 10,tokens); 
+                $('#map').mapview({'map': map});
+$('#map-window').draggable({handle: '#map'});
+                $('#hexmap polygon').live('click', function(e) {
+                    console.log('('+$(this).attr('data-x')+','+$(this).attr('data-y')+')');
+                    map.removeToken(tokens[0]);
+                });*/
+$.ajax({url: 'fed.json', 
+        type: 'GET', 
+        dataType:'json', 
+        success: function(data, textStatus, jqXHR) {
+            var systems = {};
+            for (var i=0; i<97; ++i) {
+                systems[(i+1)+''] = {'damaged': false};
+            }
+            systems["3"].damaged = true;
+            systems["24"].damaged = true;
+            ssd = new SFB.ShipSystemDisplay(systems);
+            $('#map').ssdview({'layout': data, 'ssd': ssd});
+            $('#map .box').click(function(e) {
+                console.log($(this).attr('data-id'));
+            });
+}});
               });
         </script>
         <title>Test Window</title>
         <style>
-            .window {
-                overflow: hidden;
+#map-window {
+  border: 2px solid black;
+  padding: 5px;
+  border-radius: 5px;
+}
 
-                padding: 1px;
-                border: 2px solid black;
-                margin: 0px;
-
-                background-color: white;
-            }
-            .window > div.scrollable {
-                overflow: auto;
-                margin: 1px;
-            }
+.box {
+  pointer-events: all;
+}
         </style>
     </head>
     <body>
-        <div id="window1"></window>
+        <div id="map-window">    
+            <div id="map" />
+        </div>
     </body>
 </html>
