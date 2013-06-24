@@ -1,0 +1,114 @@
+Outline of Client Application
+-----------------------------
+
+start
+- login or observer
+- if login:
+ - game list of current games
+- else:
+ - paginated game list
+- select game
+
+
+- menu
+ - logout, initiate command
+- map
+- hex close-up
+ - show all units in a hex (non-overlapped) in correct positional relationship
+ - click on units to open ssd / other info
+- unit list (by player) 
+ - select unit for command
+- ssd windows
+ - open by unit list or click on map icon
+ - include other info e.g. movement cost, speed
+- energy allocation
+- speed plot
+- system details (e.g weapon stats, etc.)
+ 
+global Application object
+
+load game
+- resolve game ref
+- load map
+- load log
+- load player
+
+load player
+- resolve player ref
+- load log
+- load queue
+- load status
+- load units
+
+Components
+- Menu
+
+- Map
+ - dimensions
+ - terrain
+  - identity
+  - location
+ - units
+  - identity
+  - location
+  - facing
+{
+  "id" : "/g/<game-id>/map",
+  "dimensions" : [42, 30],
+  "units" : [
+    {
+      "id" : "/g/<game-id>/u/<unit-id>",
+      "position" : "1015A"
+    }
+  ]
+}
+
+- Hex Close-Up
+ - location
+ - units
+  - identity
+  - intra-hex location
+  - facing
+
+- Unit List
+ - units
+  - id
+  - player
+   - id
+   - name
+  - name
+  - location
+  - facing
+
+- SSD
+ - unit
+  - id
+  - type
+ - systems
+  - id
+  - name
+  - damage status
+ - properties
+  - name
+  - value
+
+- Energy Allocation
+
+- Speed Plot
+ - unit
+  - id
+ - plot
+  - speed 
+  - start
+  - duration
+
+- System Details
+ - unit
+  - id
+ - id
+ - name
+ - type
+ - properties
+  - name
+  - value
+ 
