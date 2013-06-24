@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="http://static.sfb.local/jquery-ui-1.8.11.custom.css" type="text/css" rel="Stylesheet" />
+    <link href="../test_app.css" type="text/css" rel="Stylesheet" />
+    <script type="text/javascript" src="../jquery.min.js"></script>       
+    <script type="text/javascript" src="../jquery-ui.js"></script>       
+    <script type="text/javascript" src="../jquery.tmpl.js"></script>       
+    <script type="text/javascript" src="../sfb.js"></script>       
+    <script type="text/javascript" src="../application.js"></script>       
+    <script type="text/javascript" src="../test_app.js"></script>
+    <script type="text/javascript">
+$(function() {
+});
+    </script>
+    <title>Test App</title>
+  </head>
+  <body>
+    <div id="overlay"></div>
+    <ul id="menu" class="menu">
+      <li id="start" class="menu-item"><img width="30" height="30" src="target.png" /></li>
+    </ul>
+    <form id="login">
+      <fieldset>
+        <label for="username">Name</label>
+        <input name="username" type="text" />
+        <label for="password">Password</label>
+        <input name="password" type="password" />
+        <a id="anonymous" href="#">I'm just observing</a>
+        <input type="submit" value="Login" />
+      </fieldset>
+    </form>
+    <div id="foo" />
+<script id="game-ref-template" type="text/x-jquery-tmpl">
+<li class="${type} ref"><a href="${href}">${title}</a></li>
+</script>
+<script id="player-ref-template" type="text/x-jquery-tmpl">
+<li class="${type} ref"><a href="${href}">${name}</a></li>
+</script>
+<script id="game-detail-template" type="text/x-jquery-tmpl">
+<li class="${type}">
+  <a href="${href}">${title}</a>
+  <ul>
+    {{tmpl(players) '#player-ref-template'}}
+  </ul>
+</li>
+</script>
+  </body>
+</html>

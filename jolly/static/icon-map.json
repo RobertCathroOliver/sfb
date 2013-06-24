@@ -1,0 +1,11 @@
+{
+"type": "template-mapper", 
+"map": 
+    {
+    "shuttle1": 
+        {
+        "icon": "arrow.png",
+        "ssd": "shuttle.json"
+        }
+    }
+}
