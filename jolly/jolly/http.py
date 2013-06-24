@@ -72,7 +72,7 @@ class MethodDispatcher(object):
     """Dispatch to different methods based on HTTP verb."""
 
     def __init__(self, method_map):
-        self.methods = {}
+        self.methods = {'OPTIONS': self.OPTIONS}
         self.default = None
         for k, v in method_map.items():
             if k == '__default__':
@@ -82,11 +82,20 @@ class MethodDispatcher(object):
             else:
                 for e in k:
                     self.methods[e] = v
+        
+    def OPTIONS(self, request, *args, **kwargs):
+        response = HttpResponse()
+        response['Access-Control-Allow-Methods'] = ','.join(self.methods.keys())
+        response['Access-Control-Allow-Headers'] = 'origin,authorization,content-type,accept'
+        return response
     
     def __call__(self, request, *args, **kwargs):
         view_func = self.methods.get(request.method, self.default)
         if view_func:
-            return view_func(request, *args, **kwargs)
+            response = view_func(request, *args, **kwargs)
+            response['Access-Control-Allow-Origin'] = request.META.get('HTTP_ORIGIN');
+            response['Access-Control-Allow-Credentials'] = 'true'
+            return response
         return HttpResponseNotAllowed(self.methods.keys())
 
 content_negotiate = MultiResponse(
