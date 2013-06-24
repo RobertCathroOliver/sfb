@@ -14,7 +14,7 @@ DATABASE = {
 QUERY_VIEWS = {
     'jolly.core.Game': 'query/games',
     'jolly.core.User': 'query/users',
-    'login': 'login/by_name',
+    'login': 'login/by_email',
 }
 
 # Make this unique, and don't share it with anybody.
