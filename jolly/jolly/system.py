@@ -50,7 +50,7 @@ class System(object):
 
     @property
     def exposed_commands(self):
-        """Return a set of commands available to this Unit."""
+        """Return a set of commands available to this System."""
         return self.prototype.exposed_commands
 
     def __deepcopy__(self, memo):
@@ -82,9 +82,7 @@ class Prototype(object):
     @property
     def exposed_commands(self):
         """Return a set of Commands available to this System."""
-        return reduce(set.union, 
-                     [s.exposed_commands for s in self.services.values()],
-		     [s.prototype.exposed_commands for s in self.subsystems])
+        return set.union(reduce(set.union, [s.exposed_commands for s in self.services.values()], set()), reduce(set.union, [s.prototype.exposed_commands for s in self.subsystems],  set()))
 
     def get_service(self, name):
         """Return the Service with the given name."""
