@@ -28,7 +28,7 @@ class SequenceOfPlayBreakPoint(BreakPoint):
 
 
 class PropertyChangeBreakPoint(BreakPoint):
-    """Break when a given property changes on a given system (or its subsystems."""
+    """Break when a given property changes on a given system (or its subsystems)."""
 
     action_type = 'property-change'
 
