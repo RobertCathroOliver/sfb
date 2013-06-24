@@ -1,0 +1,3 @@
+sudo start uwsgi
+sudo stop uwsgi
+/etc/init/uwsgi.conf
