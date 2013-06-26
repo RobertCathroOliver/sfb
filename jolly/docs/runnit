@@ -1,0 +1,9 @@
+export PYTHONPATH=/home/robert/projects/jolly/src/jolly
+sudo service couchdb start
+in /home/robert/jolly/src/jolly/test:
+python manage.py runserver
+
+Go to:
+http://static.sfb/local to test ajax
+http://127.0.0.1:5984/_utils/ for Futon
+
