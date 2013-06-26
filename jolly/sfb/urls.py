@@ -1,7 +1,6 @@
 import operator
 
 from django.conf.urls.defaults import patterns
-from django.views.generic.simple import direct_to_template
 
 from jolly.http import MethodDispatcher
 from jolly.view import (root, get, get_many, registry_get,
