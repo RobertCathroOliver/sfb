@@ -2,8 +2,18 @@ var SFB = {};
 SFB.Root = function() {
     console.log('Root');
 };
-SFB.Game = function() {
-    console.log('Game');
+SFB.Game = function(id, title) {
+    this.getId = function() {
+        return id;
+    };
+
+    this.getTitle = function() {
+        return title;
+    };
+};
+
+SFB.Game.create = function(load, data) {
+    return new SFB.Game(data.href, data.title);
 };
 SFB.User = function() {
     console.log('User');
@@ -443,7 +453,7 @@ SFB.ShipSystemDisplay.create = function(load, data) {
             var self = this;
             this.table = $(table_html);
             this.element.append(this.table);
-            this.table.on('click', 'button', function(e) {
+            this.table.on('click', '.sfb-view-game', function(e) {
         	$(self.element).trigger('view-game', $(this).attr('data-href'));
             });
         },
@@ -460,7 +470,7 @@ SFB.ShipSystemDisplay.create = function(load, data) {
 
         destroy: function() {
             this.table.remove();
-            $.Widget.prototype._destroy.call(this);
+            $.Widget.prototype.destroy.call(this);
         },
 
         _setOption: function(key, value) {
@@ -480,6 +490,7 @@ SFB.ShipSystemDisplay.create = function(load, data) {
 
     var players_table_html = '<table><thead><tr><th>Player</th><th>Units</th></tr></thead><tbody></tbody></table>';
     var player_row_tmpl = '<tr><td>${name}</td><td><ul class="unit-list">{{tmpl(units) "#sfb-unit-list-template"}}</ul></td></tr>';
+    var player_row_tmpl = '<tr><td>${name}</td><td><ul class="unit-list"></ul></td></tr>';
     var unit_list_tmpl = '<li>${id}</li>';
 
     $(function() {
@@ -508,7 +519,7 @@ SFB.ShipSystemDisplay.create = function(load, data) {
 
         destroy: function() {
             this.players_table.remove();
-            $.Widget.prototype._destroy.call(this);
+            $.Widget.prototype.destroy.call(this);
         },
 
         _setOption: function(key, value) {

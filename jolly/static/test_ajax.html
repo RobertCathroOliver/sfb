@@ -18,6 +18,7 @@
                         'withCredentials': true
                     },
 		    'url': 'http://api.sfb.local/' + url,
+		    //'url': 'http://127.0.0.1:8000/' + url,
 		    'success': function(data, textStatus, jqXHR) {
 			var re = /"href":"([^"]*)"/g;
 			var d = JSON.stringify(data).replace(re, '"href":"<a href="#" onclick="submit(\'$1\'); return false;">$1</a>"');

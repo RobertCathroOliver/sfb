@@ -9,7 +9,7 @@ SFB.Error = {
     }
 };
 
-SFB.TemplateMapper = function(template_map) {
+SFB.TemplateMapper = function(load, template_map) {
     return function(id) {
         return template_map.map[id];
     };
@@ -19,7 +19,7 @@ SFB.Loader = (function() {
 
     var type_map = {
         'root': SFB.Root,
-        'game': SFB.Game,
+        'game': function(load, data) { return data; },
         'user': SFB.User,
         'player': SFB.Player,
         'log': SFB.Log,
@@ -32,7 +32,7 @@ SFB.Loader = (function() {
         'map': SFB.Map.create,
         'command': SFB.Command,
         'template-mapper': SFB.TemplateMapper,
-        'layout': function(x) { return x; }
+        'layout': function(load, data) { return data; }
     };
 
     var construct = function(root_url) {
@@ -176,13 +176,17 @@ SFB.Application = (function(root_url, chrome_url) {
             handle: $(content),
             stack: '.window'
         };
-        var w = $('<div />').addClass('window').append($(content)).draggable(drag_options);
+        var w = $('<div class="window"><button class="close-window">&times;</button></div>').append($('<div class="window-content" />').append($(content))).draggable(drag_options);
         if (options.width) {
             w.width(options.width);
         }
         if (options.height) {
             w.height(options.height);
         }
+	w.find('.close-window').on('click', function(e) {
+          e.preventDefault();
+          w.remove();
+        });
         $('body').append(w);
         return w;
     };
@@ -237,12 +241,22 @@ SFB.Application = (function(root_url, chrome_url) {
         }, handleError);
     };
 
+    var showGames = function(games, options) {
+        createWindow($('<div />').gamelistview({games: games}), options);
+    };
+
+    var showGame = function(game, options) {
+        createWindow($('<div />').gamesummary({game: game}), options);
+    };
+
     return {
         login: login,
         logout: logout,
         load: load,
         showMap: showMap,
-        showSSD: showSSD
+        showSSD: showSSD,
+        showGames: showGames,
+        showGame: showGame
     };
 })('api.sfb.local', 'static.sfb.local');
 

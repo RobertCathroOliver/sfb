@@ -7,15 +7,17 @@ ul.menu {
   list-style: none;
   border: 1px solid #ccc;
   border-radius: 5px;
-  height: 40px;
+  /* height: 40px; */
   padding: 2px;
-  width: 40px;
+  /* width: 40px; */
+  width: 90px;
 }
 
 li.menu-item {
   display: block;
-  float: left;
+  /* float: left; */
   padding: 5px;
+  cursor: pointer;
 }
 
 #login fieldset {
@@ -113,10 +115,23 @@ li.menu-item {
   filter: alpha(opacity=80);
 }
 
-.window {
+.window-content {
   overflow: auto;
+  height: 100%;
+}
+
+.window {
+  overflow: hidden;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: white;
 }
+
+.close-window {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+

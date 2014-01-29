@@ -3,12 +3,15 @@
     <head>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>       
-        <script type="text/javascript" src="http://127.0.0.1:8000/window.js"></script>
-        <script type="text/javascript" src="http://127.0.0.1:8000/map.js"></script>
+        <script type="text/javascript" src="http://static.sfb.local/window.js"></script>
+        <script type="text/javascript" src="http://static.sfb.local/map.js"></script>
         <script type="text/javascript">
             $(function() {
+                var get_token_address = function(token_id) {
+                    return {'t1': 'http://static.sfb.local/arrow.png'}[token_id];
+                };
                 var m = new SFB.Map(10, 10);
-                var w1 = m.create_window('#window1', {width: 200, scrollable: true});
+                var w1 = m.create_window('#window1', get_token_address, {width: 300, scrollable: true});
                 w1.draw();
 		m.add_token('t1', '0302');
               });

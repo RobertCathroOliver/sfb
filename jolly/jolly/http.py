@@ -84,7 +84,7 @@ class MethodDispatcher(object):
                     self.methods[e] = v
         
     def OPTIONS(self, request, *args, **kwargs):
-        response = HttpResponse()
+	response = HttpResponse()
         response['Access-Control-Allow-Methods'] = ','.join(self.methods.keys())
         response['Access-Control-Allow-Headers'] = 'origin,authorization,content-type,accept'
         return response
