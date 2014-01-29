@@ -20,3 +20,4 @@ I wanted to test a few things:
 Some notes:
  - SFB has hundreds of pages of rules.  I wanted to be able to capture them succinctly.
  - I wanted parts of it to be sufficiently generic to be able to used for other games.
+ - The jolly module is the more generic stuff.  The sfb module is specific to the SFB game.
